@@ -1,0 +1,31 @@
+The Database one single directory called 'databaseOS', this has the below contents:
+Each file is binary file, initially you can implement like txt for ease. but finally they all become binary.
+
+The User groups are: Admin, HOD, Instructors, Students.
+
+1) Each Instructor has an exclusive directory with his name. Each of this directory has 3 files.
+	a) history0.bin		-Admin	: RWX;		//the latest one
+						-Instr	: RWX;
+
+	b) history1.bin		-Admin	: ---;
+						-Instr	: RWX;
+	
+	c) history2.bin		-Admin	: ---;
+						-Instr	: RWX;
+
+	d) StudentList.bin	-Admin	: RWX;		//list of students taking his course.
+						-Instr	: RWX;
+	
+	e) pids.bin			-Admin	: ---;		//contains the student names and pids of the 
+						-Instr	: RWX;		//the process to which it should send a signal
+						-stud	: ---;		//when that corresponding students marks are 
+											//updated.
+
+2) Each student has his own file with his name containing the list of courses he is taking.
+	student.bin			-Admin	: RWX;
+						-stud	: RWX;
+						-others	: ---;
+
+3) Log File				-Admin	: RWX;
+						-Instr	: ---;
+

@@ -1,0 +1,9 @@
+What does the main executable do?
+
+	-When an user executes the comman ./main,
+	the program first checks if the user belongs to student group or faculty group or admin group or hod group.
+
+	accordingly the program call exec with the executable student( if the user belongs to student group), similarly for other user groups.
+
+
+	This one does nothing but running appropriate executables automatically on behalf the user. We could just run an if else statements executing the corresponding executable's code  in just one big program, but we do not want the execution to depend on just an if condition. By making seperate executables we will be able to restrict the user to execute only his code but not others( for example: if an user is a student then he will have execute permission only for student executable, he cannot execute faculty, admin or hod executables there by preventing him completely from that kind of code.)

@@ -1,0 +1,32 @@
+task done:
+	log file
+	interaction
+	logout.
+
+
+	options:
+		1) add student
+		2) add instructor
+		3) remove student
+		4) remove instructor
+		5) add hod
+		6) remove hod
+		7) add another admin
+		8) remove admin
+		9) show all users
+		10) promote a user to other actor.
+		10) view a students marks
+		12) view log file
+	
+		1,2,5,7) 
+			all are similar in creation, accordingly set them permissions and add them to groups, create any folders for them.
+		3,4,6,8)
+			delete the user and remove any files or folders.
+
+		9) show all users:
+			show users in each of the user groups.
+		10) promote a user to other actor.
+			just like creating a user, but need not create a new account, just give permissions and folders.
+		11) view student marks,
+			just like  hod
+		12) view log file, display it.

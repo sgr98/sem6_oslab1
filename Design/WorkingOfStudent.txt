@@ -1,0 +1,27 @@
+after getting redirected to student from main,
+	The first thing the program does is to write to a log file about its login.(a seperate process is forked to do this task)
+
+	Next the usual interactive session is started where the user will be provided with different options. and logout option, before logging out the information is again written to the log file.
+
+	the options provided are:
+		1) View marks ( his own marks ) with class statistics
+		2) alert on change of marks.
+		3) download marks
+		4) share marks with other students.
+		5) see shared marks.
+
+	How are these features implemented:
+	View marks:
+		-program searches  for his files.
+		-goes to all directories of the course he is taking
+		-fetches his marks from those.
+		-display them
+	alert:
+		-A process is forked, goes to background, appends to the files pids.txt of all his courses with its entry and sleeps and waits for a signal if there are any updates.
+		-if any signal arrives then it simply notifies and kills itself.
+	download:
+		simply create a txt file containing marks which can be only viewed by that user.
+	share marks:
+		simply add the student( the student to which the user wants to share) to his owner group.
+	view shared marks;
+		see the groups to which he belongs to and check if any of them belong to the student group, if so then fetch his marks and display them.

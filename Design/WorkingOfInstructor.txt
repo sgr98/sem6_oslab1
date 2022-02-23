@@ -1,0 +1,29 @@
+tasks done:
+	log file
+	usual interaction 
+	logout information to log file
+
+	options:
+		1) view marks of all students.
+		2) editing them
+		3) view past history.
+		4) set the current to previous histories.
+		5) download marks
+	
+	
+	working:
+	1) view marks
+		-simply read the latest history file and display
+	2) edit them
+		-copy all the contents into some data structure and keeping editing it.
+		-if wants to save then copy hist1 to hist2, hist0 to hist1 and copy back the datastructure into the hist0;
+	
+	3) show them the files hist1 or hist2 based on his choice.
+	4) set the current to previous
+		-same as in point2
+	5) download marks
+		-create a txt file and make him as the only user.
+	
+	other operations:
+		when saving the changes look the pids.txt and send signal to each of them about the changes.
+		also calculate the average, highest marks while saving each time and store in the history file itself.

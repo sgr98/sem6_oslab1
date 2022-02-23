@@ -1,0 +1,12 @@
+task done:
+	log file
+	usual interaction
+	logout information to log file.
+
+	options:
+		1) view all marks of all students and instructors.
+		2) download marks
+
+	working:
+	1) if we wants to see the marks student wise then show him the studentlist, upon selecting the student show him the marks of that student.
+	2) create txt file for all students.
