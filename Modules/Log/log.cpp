@@ -7,15 +7,7 @@
 
 using namespace std;
 
-class log
-{
-    public:
-    string date;
-    string time;
-    string user;
-    string type;
-    string action;
-    log(string date,string time,string user,string type,string action)
+log::log(string date,string time,string user,string type,string action)
     {
         this->date=date;
         this->time=time;
@@ -23,7 +15,6 @@ class log
         this->type=type;
         this->action=action;
     }
-};
 
 vector<log> get_logs()
 {
