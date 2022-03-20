@@ -1,0 +1,54 @@
+1) Student File:
+		contains, list of courses;
+		add course,
+		remove course,
+		fetch all courses
+		delete file
+		create file
+		modify course
+
+2) Log file: 
+		add log
+		log format: date, time, username, login or ogout
+		clear log
+		add login
+		remove login
+		fetch logs
+		create file
+
+3) instructor student list:
+		contains list of students;
+		add student
+		remvoe student
+		fetch all students
+		delete file
+		create file
+		modify students
+
+4) instructor marks list:
+		contains vector of pairs( student names and marks).
+		add, remove pairs.
+		modify pair
+		fetch the pairs, 
+		write the pairs, ( input will be a vector of pairs ).
+		save the file, heirarchically
+
+5) Download student marksheet.
+		fetch the marks and write to a file
+
+6) Download instructor marksheet.
+		fetch the marks and write to a file
+
+7) pids
+		contains the vector of pairs( pid and studentname ).
+		add, remove pairs, 
+		fetch the pairs with the given name
+		write a pair
+		create and clear file
+
+
+8) create a background process.
+		write a function that creates a background process.
+		it should have a signal handler( the signal is SIGUSR1 ), that executes a particular code, when the signal is raised. the code to run will be told later.
+
+9) w
