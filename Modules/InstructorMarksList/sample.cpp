@@ -8,7 +8,7 @@
 using namespace std;
 
 int main() {
-	string fileName = "./marks.txt";
+	string fileName = "./hist0.txt";
 	string student1 = "student1";
 	string student2 = "student20";
 	
@@ -38,12 +38,9 @@ int main() {
 			instructor_marks_list.modifyMark(fileName, student1, student2, 60);
 			break;
 		case 4:
-			instructor_marks_list.fetchMarksList(fileName);
-			break;
-		case 5:
 			instructor_marks_list.writeMarksList(fileName, addMarksList);
 			break;
-		case 6:
+		case 5:
 			cout << instructor_marks_list.getMarksAverage(fileName) << endl;
 			break;
 		default:

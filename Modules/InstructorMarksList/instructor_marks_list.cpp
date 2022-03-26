@@ -103,53 +103,73 @@ void InstructorMarksList::printMarksList() {
 	}
 }
 
-void InstructorMarksList::clearMarksList() {
-	student_marks_list.clear();
+void InstructorMarksList::fetchMarksList(string fileStr) {
+	int len = fileStr.length();
+	char fileName[len + 1];
+	strcpy(fileName, fileStr.c_str());
+	
+	// Initialising the marks list
+	if(student_marks_list.size() == 0) {
+		openFile(fileName, 1);
+		clearMarksList();
+		tokenizeMarksList();
+		closeFile(fileName);
+	}
 }
+
+int InstructorMarksList::copyFile(char *fileName1, char *fileName2) {
+	int charLen;
+	char buffer[4000];
+	// Get contents of file 1
+	openFile(fileName1, 1);
+	charLen = read(fileDescpritor, buffer, 1000);
+	buffer[charLen] = '\0';
+	closeFile(fileName1);
+	// Remove contents in the file 2
+	if(truncate(fileName2, 0) == -1) {
+		perror("Could not truncate");
+		return -1;
+	}
+	// Add file 1 contents to file 2
+	openFile(fileName2, 2);	
+	write(fileDescpritor, buffer, charLen);
+	closeFile(fileName2);
+
+	return 1;
+}
+
+
+// ///////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////
+// PUBLIC MEMBERS
+// ///////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////
+
 
 InstructorMarksList::InstructorMarksList() {
 	
 }
 
 void InstructorMarksList::addMark(string fileStr, string student, float mark) {
-	int len = fileStr.length();
-	char fileName[len + 1];
-	strcpy(fileName, fileStr.c_str());
+	if(student_marks_list.size() == 0) {
+        // Initialising the marks list
+        fetchMarksList(fileStr);
+    }
 
-	// Initialising the marks list
-	openFile(fileName, 1);
-	clearMarksList();
-	tokenizeMarksList();
-	closeFile(fileName);
-	
-	// Adding mark
-	openFile(fileName, 2);
-	pair<string, float> entry;
+    // Adding mark list
+    pair<string, float> entry;
 	entry.first = student;
 	entry.second = mark;
 	student_marks_list.push_back(entry);
-	writeMarksListBack();
-	closeFile(fileName);
 }
 
 void InstructorMarksList::removeMark(string fileStr, string student) {
-	int len = fileStr.length();
-	char fileName[len + 1];
-	strcpy(fileName, fileStr.c_str());
-	
-	// Initialising the marks list
-	openFile(fileName, 1);
-	clearMarksList();
-	tokenizeMarksList();
-	closeFile(fileName);
-	
-	// Remove contents in the file
-	if(truncate(fileName, 0) == -1) {
-		perror("Could not truncate");
-	}
-	
-	// Removing mark
-	openFile(fileName, 2);
+	if(student_marks_list.size() == 0) {
+        // Initialising the marks list
+        fetchMarksList(fileStr);
+    }
 	
 	vector<pair<string, float>>::iterator it;
 	it = student_marks_list.begin();
@@ -161,30 +181,15 @@ void InstructorMarksList::removeMark(string fileStr, string student) {
 		i++;
 	}
 	student_marks_list.erase(it + i);
-	writeMarksListBack();
-	
-	closeFile(fileName);
 }
 
 void InstructorMarksList::modifyMark(string fileStr, string student, string newStudent, float newMark) {
-	int len = fileStr.length();
-	char fileName[len + 1];
-	strcpy(fileName, fileStr.c_str());
+	if(student_marks_list.size() == 0) {
+        // Initialising the marks list
+        fetchMarksList(fileStr);
+    }
 	
-	// Initialising the marks list
-	openFile(fileName, 1);
-	clearMarksList();
-	tokenizeMarksList();
-	closeFile(fileName);
-	
-	// Remove contents in the file
-	if(truncate(fileName, 0) == -1) {
-		perror("Could not truncate");
-	}
-	
-	// Modifying mark
-	openFile(fileName, 2);
-	
+	// Modifying marks list
 	int i = 0;
 	int n = student_marks_list.size();
 	while(i < n) {
@@ -203,46 +208,17 @@ void InstructorMarksList::modifyMark(string fileStr, string student, string newS
 			student_marks_list[i].second = newMark;
 		}
 	}
-	writeMarksListBack();
-	
-	closeFile(fileName);
-}
-
-void InstructorMarksList::fetchMarksList(string fileStr) {
-	int len = fileStr.length();
-	char fileName[len + 1];
-	strcpy(fileName, fileStr.c_str());
-	
-	// Initialising the marks list
-	openFile(fileName, 1);
-	clearMarksList();
-	tokenizeMarksList();
-	closeFile(fileName);
 }
 
 void InstructorMarksList::writeMarksList(string fileStr, vector<pair<string, float>> marks) {
-	int len = fileStr.length();
-	char fileName[len + 1];
-	strcpy(fileName, fileStr.c_str());
+	if(student_marks_list.size() == 0) {
+        // Initialising the marks list
+        fetchMarksList(fileStr);
+    }
 	
-	// Initialising the marks list
-	openFile(fileName, 1);
-	clearMarksList();
-	tokenizeMarksList();
-	closeFile(fileName);
-	
-	// Remove contents in the file
-	if(truncate(fileName, 0) == -1) {
-		perror("Could not truncate");
-	}
-	
-	// Appending marks list to the file
-	openFile(fileName, 2);
 	int n = marks.size();
 	for(int i = 0; i < n; i++)
 		student_marks_list.push_back(marks[i]);
-	writeMarksListBack();
-	closeFile(fileName);
 }
 
 vector<pair<string, float>> InstructorMarksList::getMarksList(string fileStr) {
@@ -250,8 +226,15 @@ vector<pair<string, float>> InstructorMarksList::getMarksList(string fileStr) {
 	return student_marks_list;
 }
 
+void InstructorMarksList::clearMarksList() {
+	student_marks_list.clear();
+}
+
 float InstructorMarksList::getMarksAverage(string fileStr) {
-	fetchMarksList(fileStr);
+	if(student_marks_list.size() == 0) {
+        // Initialising the marks list
+        fetchMarksList(fileStr);
+    }
 	int n = student_marks_list.size();
 	float avg = 0;
 	for(int i = 0; i < n; i++) {
@@ -259,4 +242,115 @@ float InstructorMarksList::getMarksAverage(string fileStr) {
 	}
 	avg /= (float) n;
 	return avg;
+}
+
+void InstructorMarksList::editStudentMark(string fileStr, string student, float newMark) {
+	modifyMark(fileStr, student, "", newMark);
+}
+
+int InstructorMarksList::saveEdit(string fileStr0, string fileStr1, string fileStr2) {
+    int len = fileStr0.length();
+	char fileName0[len + 1];
+	strcpy(fileName0, fileStr0.c_str());
+
+	len = fileStr1.length();
+	char fileName1[len + 1];
+	strcpy(fileName1, fileStr1.c_str());
+
+	len = fileStr2.length();
+	char fileName2[len + 1];
+	strcpy(fileName2, fileStr2.c_str());
+
+	// Change and save every history file
+	if(copyFile(fileName1, fileName2) == -1)
+		return -1;
+	if(copyFile(fileName0, fileName1) == -1)
+		return -1;
+
+	// /////////////////////////////////////////////
+	// Add student_marks_list contents to file 0
+	openFile(fileName0, 2);
+	writeMarksListBack();
+	closeFile(fileName0);
+
+	return 1;
+}
+
+int InstructorMarksList::revertHistory1(string fileStr0, string fileStr1) {
+	int len = fileStr0.length();
+	char fileName0[len + 1];
+	strcpy(fileName0, fileStr0.c_str());
+
+	len = fileStr1.length();
+	char fileName1[len + 1];
+	strcpy(fileName1, fileStr1.c_str());
+
+	int charLen;
+	char buffer[4000];
+	// Get contents of file 1
+	openFile(fileName1, 1);
+	charLen = read(fileDescpritor, buffer, 1000);
+	buffer[charLen] = '\0';
+	closeFile(fileName1);
+	
+	// Overwrite file 1 with content of file 0
+	if(copyFile(fileName0, fileName1) == -1)
+		return -1;
+
+	// Remove contents in the file 0
+	if(truncate(fileName0, 0) == -1) {
+		perror("Could not truncate");
+		return -1;
+	}
+	// Overwrite file 1 contents to file 0
+	openFile(fileName0, 2);	
+	write(fileDescpritor, buffer, charLen);
+	closeFile(fileName0);
+
+	clearMarksList();
+
+	return 1;
+}
+
+int InstructorMarksList::revertHistory2(string fileStr0, string fileStr1, string fileStr2) {
+	int len = fileStr0.length();
+	char fileName0[len + 1];
+	strcpy(fileName0, fileStr0.c_str());
+
+	len = fileStr1.length();
+	char fileName1[len + 1];
+	strcpy(fileName1, fileStr1.c_str());
+
+	len = fileStr2.length();
+	char fileName2[len + 1];
+	strcpy(fileName2, fileStr2.c_str());
+
+	int charLen;
+	char buffer[4000];
+	// Get contents of file 1
+	openFile(fileName2, 1);
+	charLen = read(fileDescpritor, buffer, 1000);
+	buffer[charLen] = '\0';
+	closeFile(fileName2);
+
+	// Overwrite file 2 with content of file 1
+	if(copyFile(fileName1, fileName2) == -1)
+		return -1;
+	// Overwrite file 1 with content of file 0
+	if(copyFile(fileName0, fileName1) == -1)
+		return -1;
+
+	// Remove contents in the file 0
+	if(truncate(fileName0, 0) == -1) {
+		perror("Could not truncate");
+		return -1;
+	}
+	// Overwrite file 2 contents to file 0
+	openFile(fileName0, 2);	
+	write(fileDescpritor, buffer, charLen);
+	closeFile(fileName0);
+
+	clearMarksList();
+
+	return 1;
 }

@@ -20,8 +20,10 @@ class InstructorMarksList {
 		void writeMarksListBack();
 		// Print Marks List
 		void printMarksList();
-		// Clear Marks List vector
-		void clearMarksList();
+		// Fetch all Mark Lists present in student file
+		void fetchMarksList(string fileStr);
+		// Overwrite content of file 1 into file 2
+		int copyFile(char *fileName1, char *fileName2);
 		
 	public:
 		// Student Constructor
@@ -32,12 +34,21 @@ class InstructorMarksList {
 		void removeMark(string fileStr, string student);
 		// Modify Student Mark from a list of courses present in student file
 		void modifyMark(string fileStr, string student, string newStudent, float newMark);
-		// Fetch all Mark Lists present in student file
-		void fetchMarksList(string fileStr);
 		// Write Marks List to the file
 		void writeMarksList(string fileStr, vector<pair<string, float>> marks);
 		// Return all Marks lists of a student
 		vector<pair<string, float>> getMarksList(string fileStr);
+		// Clear Marks List vector
+		void clearMarksList();
 		// Get average of all marks
 		float getMarksAverage(string fileStr);
+
+		// Edit marks of specified student
+		void editStudentMark(string fileStr, string student, float newMark);
+		// Save the file cyclically
+		int saveEdit(string fileStr0, string fileStr1, string fileStr2);
+		// Revert to History 1
+		int revertHistory1(string fileStr0, string fileStr1);
+		// Revert to History 2
+		int revertHistory2(string fileStr0, string fileStr1, string fileStr2);
 };
