@@ -4,6 +4,9 @@
 #include <vector>
 #include <limits.h>
 
+#include <fcntl.h>
+#include <unistd.h>
+
 using namespace std;
 
 // Number of columns    =   Number of Instructors   =   instructor_and_files.size() + 1 for student_name
@@ -16,6 +19,6 @@ int checkNameInAllStudentInstructorMarks(string student, vector<pair<string, vec
 // Get all marks of all students and instructors
 vector<pair<string, vector<float>>> getAllStudentInstructorMarks(vector<pair<string, string>> instructor_and_files);
 // Get string value of all marks of all students and instructors
-string getAllStudentInstructorMarksString(vector<pair<string, float[]>> allStudentInstructorMarks);
+string getAllStudentInstructorMarksString(vector<pair<string, vector<float>>> allStudentInstructorMarks);
 // Download all marks of all students and instructors in a file
 void downloadAllStudentsInstructorMarks(string fileStr, vector<pair<string, string>> instructor_and_files);
