@@ -28,6 +28,8 @@ vector<log> get_logs()
         getline ( personal_filein , line,' ' );
         date+=line;
         getline ( personal_filein , line,' ' );
+        if(line=="")
+        getline ( personal_filein , line,' ' );
         date+=line;
         getline ( personal_filein , line,' ' );
         time=line;
