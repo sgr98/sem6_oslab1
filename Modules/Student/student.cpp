@@ -132,9 +132,9 @@ void Student::removeCourse(string fileStr, string courseName) {
 	closeFile(fileName);
 	
 	// Remove contents in the file
-	if(truncate(fileName, 0) == -1) {
-		perror("Could not truncate");
-	}
+	// if(truncate(fileName, 0) == -1) {
+	// 	perror("Could not truncate");
+	// }
 	
 	// Removing Course
 	openFile(fileName, 2);
@@ -166,9 +166,9 @@ void Student::modifyCourse(string fileStr, string courseName, string newCourseNa
 	closeFile(fileName);
 	
 	// Remove contents in the file
-	if(truncate(fileName, 0) == -1) {
-		perror("Could not truncate");
-	}
+	// if(truncate(fileName, 0) == -1) {
+	// 	perror("Could not truncate");
+	// }
 	
 	// Modifying course
 	openFile(fileName, 2);

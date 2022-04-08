@@ -126,10 +126,10 @@ int InstructorMarksList::copyFile(char *fileName1, char *fileName2) {
 	buffer[charLen] = '\0';
 	closeFile(fileName1);
 	// Remove contents in the file 2
-	if(truncate(fileName2, 0) == -1) {
-		perror("Could not truncate");
-		return -1;
-	}
+	// if(truncate(fileName2, 0) == -1) {
+	// 	perror("Could not truncate");
+	// 	return -1;
+	// }
 	// Add file 1 contents to file 2
 	openFile(fileName2, 2);	
 	write(fileDescpritor, buffer, charLen);
@@ -309,10 +309,10 @@ int InstructorMarksList::revertHistory1(string fileStr0, string fileStr1) {
 		return -1;
 
 	// Remove contents in the file 0
-	if(truncate(fileName0, 0) == -1) {
-		perror("Could not truncate");
-		return -1;
-	}
+	// if(truncate(fileName0, 0) == -1) {
+	// 	perror("Could not truncate");
+	// 	return -1;
+	// }
 	// Overwrite file 1 contents to file 0
 	openFile(fileName0, 2);	
 	write(fileDescpritor, buffer, charLen);
@@ -352,10 +352,10 @@ int InstructorMarksList::revertHistory2(string fileStr0, string fileStr1, string
 		return -1;
 
 	// Remove contents in the file 0
-	if(truncate(fileName0, 0) == -1) {
-		perror("Could not truncate");
-		return -1;
-	}
+	// if(truncate(fileName0, 0) == -1) {
+	// 	perror("Could not truncate");
+	// 	return -1;
+	// }
 	// Overwrite file 2 contents to file 0
 	openFile(fileName0, 2);	
 	write(fileDescpritor, buffer, charLen);
