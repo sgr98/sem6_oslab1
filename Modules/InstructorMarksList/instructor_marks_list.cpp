@@ -162,7 +162,18 @@ void InstructorMarksList::addMark(string fileStr, string student, float mark) {
     pair<string, float> entry;
 	entry.first = student;
 	entry.second = mark;
-	student_marks_list.push_back(entry);
+
+	int i = 0;
+	int n = student_marks_list.size();
+	while(i < n) {
+		if(student.compare(student_marks_list[i].first) == 0)
+			break;
+		i++;
+	}
+	if(i >= n)
+		student_marks_list.push_back(entry);
+	else
+		cout << student << " already exists in this marks list" << endl;
 }
 
 void InstructorMarksList::removeMark(string fileStr, string student) {
