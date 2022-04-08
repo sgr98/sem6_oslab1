@@ -102,7 +102,20 @@ void Student::addCourse(string fileStr, string courseName) {
 	
 	// Adding Course
 	openFile(fileName, 2);
-	courses.push_back(courseName);
+
+	int i = 0;
+	int n = courses.size();
+	while(i < n) {
+		if(courseName.compare(courses[i]) == 0)
+			break;
+		i++;
+	}
+	if(i >= n)
+		courses.push_back(courseName);
+	else
+		cout << "Course with course name: " << courseName 
+			<< " already exists in the student file" << endl;
+	
 	writeCoursesBack();
 	closeFile(fileName);
 }

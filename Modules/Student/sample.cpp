@@ -39,6 +39,7 @@ int main() {
 	}
 	
 	// Get courses vector
+	cout << "\n----------Printing Vector----------" << endl;
 	vector<string> course_list = student.getCourses(fileName);
 	int n = course_list.size();
 	for(int i = 0; i < n; i++) {
