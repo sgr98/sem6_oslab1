@@ -4,6 +4,7 @@
 using namespace std;
 
 
+/*
 enum position
 {
 	CENTER = 0,
@@ -84,6 +85,41 @@ class Line
 	}
 };
 
+*/
+
+Element::Element( int size, string content, int type , bool editable, bool bold, int color, bool clickable)
+{
+	this->size = size;
+	this->type = type;
+	this->editable = editable;
+	this->bold = bold;
+	this->color = color;
+	this->start = 0;
+	this->end = 0;
+	this->underlined = 0;
+	this->invert = 0;
+	this->clickable = clickable;
+	setString(content);
+}
+
+void Element::setString(string content)
+{
+	if( content.size() > size )
+	{
+		this->content = content.substr(0, size);
+	}
+	else
+	{
+		this->content = content;
+	}
+}
+
+Line::Line( vector<Element*>* elements , int position )
+{
+	this->elements = elements;
+	this->position = position;
+}
+
 string getLine( Line* l, int cols )
 {
 	if( l == NULL or l->elements == NULL )
@@ -98,10 +134,12 @@ string getLine( Line* l, int cols )
 	{
 		totalsize += elements[i]->size;
 	}
-	if( totalsize > cols )
-	{
-		return "";
-	}
+	/*
+	   if( totalsize > cols )
+	   {
+	   return "";
+	   }
+	 */
 
 	switch( l->position )
 	{
@@ -121,7 +159,6 @@ string getLine( Line* l, int cols )
 				current++;
 			}
 			break;
-			
 	}
 
 	for( int i = 0 ; i < elements.size() ; i++ )
@@ -152,7 +189,7 @@ string getLine( Line* l, int cols )
 		{
 			line += "\033[4m";
 		}
-		
+
 		if( elements[i]->invert )
 		{
 			line += "\033[7m";
@@ -179,7 +216,6 @@ void print(Element e)
 }
 
 vector<Line*> lines;
-
 
 vector<string> getContent( int rows, int cols )
 {
@@ -312,23 +348,6 @@ void getDownPos( int* x, int* y )
 	{
 		if( lines[i] != NULL )
 		{
-			/*
-			if( count <= (*(*lines[i]).elements).size() )
-			{
-				if( (*(*lines[i]).elements)[count-1]->editable == true or (*(*lines[i]).elements)[count-1]->clickable == true )
-				{
-					*y = i;
-					*x = (*(*lines[*y]).elements)[count-1]->start;
-				}
-			}
-			else
-			{
-				*y = i;
-				*x = (*(*lines[i]).elements)[(*(*lines[i]).elements).size()-1]->start;
-			}
-			return;
-			*/
-
 			if( count <= (*(*lines[i]).elements).size() )
 			{
 				if( (*(*lines[i]).elements)[count-1]->editable == true or (*(*lines[i]).elements)[count-1]->clickable == true )
@@ -454,50 +473,3 @@ void insertChar( int* x, int* y , int c)
 		}
 	}
 }
-
-void initialize()
-{
-	Element* e1 = new Element( 20, "Marksheet", STRING, false, true, GREEN, false );
-	vector<Element*>* elements1 = new vector<Element*>;
-	elements1->push_back(e1);
-	Line* l1 = new Line(elements1, CENTER);
-	lines.push_back(l1);
-
-	Element* e2 = new Element( 12, "Instructor :", STRING, false, true, GREEN, false );
-	vector<Element*>* elements2 = new vector<Element*>;
-	elements2->push_back(e2);
-	elements2->push_back(new Element( 20, " Instructor Name", STRING, false, false, RED, false ));
-	Line* l2 = new Line(elements2, CENTER);
-	lines.push_back(l2);
-
-	lines.push_back(NULL);
-
-	//                               size, content,   type,   edit , bold, color, clickable
-	vector<Element*>* elements3 = new vector<Element*>;
-	elements3->push_back(new Element( 15, "Student Name", STRING, false, true, BLUE, false ));
-	elements3->push_back(new Element( 15, "Subject 1", STRING, false, true, BLUE, false ));
-	elements3->push_back(new Element( 15, "Subject 2", STRING, false, true, BLUE, false ));
-	elements3->push_back(new Element( 15, "Subject 3", STRING, false, true, BLUE, false ));
-	elements3->push_back(new Element( 15, "Subject 4", STRING, false, true, BLUE, false ));
-	elements3->push_back(new Element( 15, "Subject 5", STRING, false, true, BLUE, false ));
-
-	Line* l3 = new Line(elements3, CENTER);
-	lines.push_back(l3);
-
-	for( int i = 0 ; i < 10 ; i++ )
-	{
-		vector<Element*>** elements = new vector<Element*>*;
-		*elements = new vector<Element*>;
-
-		(*elements)->push_back(new Element( 15, "Name "+to_string(i) , STRING, false, false, RED, false));
-		for( int j = 0 ; j < 5 ; j++ )
-		{
-			(*elements)->push_back(new Element( 15, to_string(i+j) , INT, true, false, BLACK, false));
-		}
-
-		Line** l = new Line*;
-		*l = new Line(*elements, CENTER);
-		lines.push_back(*l);
-	}
-}
-

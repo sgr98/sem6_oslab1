@@ -1,3 +1,0 @@
-      Courses:-         poorna          gelle            ram
-       student1             78             78             78
-         Mean :        59.2222        59.2222        59.2222

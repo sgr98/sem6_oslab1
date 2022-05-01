@@ -1,4 +1,4 @@
-student1	78.000000
+student1	74.000000
 student2	48.000000
 Sagar	55.000000
 suden3	62.000000
