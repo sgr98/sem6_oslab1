@@ -1,10 +1,15 @@
 #include "content.h"
+#include <iomanip>
 #include <iostream>
 #include <vector>
+#include <cstring>
 #include "editor.h"
+#include <fstream>
+#include "../Student/student.h"
+#include "./../InstructorMarksList/instructor_marks_list.h"
 using namespace std;
 
-
+string studentName;
 void StudentMarks(string AdminName, vector<string> Instructors, string Student, vector<int> marks)
 {
 	lines.clear();
@@ -97,9 +102,44 @@ void editorProcessKeypress()
 	}
 }
 
+int get_marks(string coursename,string student);
+
+float get_mean(string coursename)
+{
+	string file = "./Instructors/" + coursename + "/hist0.txt";
+    InstructorMarksList instructor_marks_list;
+    return instructor_marks_list.getMarksAverage(file);
+}
 
 void handleButtonClick( string selection )
 {
+	if( selection == "Download" )
+	{
+		ofstream f;
+
+        f.open(studentName+"Marks.txt");
+        Student student;
+        vector<string> course_list = student.getCourses("./Students/" + studentName + ".txt");
+        vector< int > marks;
+        int i;
+        int space = 15;
+        for(i=0;i<course_list.size();i++)
+        {
+            marks.push_back(get_marks(course_list[i], studentName));
+        }
+        f<<setw(space)<<"Courses:-";
+        for(i=0;i<course_list.size();i++)
+            f<<setw(space)<<course_list[i];
+        f<<endl;
+        f<<setw(space)<<studentName;
+        for(i=0;i<marks.size();i++)
+            f<<setw(space)<<marks[i];
+        f<<endl;
+        f<<setw(space)<<"Mean :";
+        for(i=0;i<course_list.size();i++)
+        f<<setw(space)<<get_mean(course_list[i]);
+        f<<endl;
+	}
 	return;
 } 
 
@@ -121,20 +161,50 @@ bool enterEditorMode( int* x, int* y )
 	return false;
 }
 
+int get_marks(string coursename,string student)
+{
+	string files = "./Instructors/" + coursename + "/hist0.txt";
+    InstructorMarksList instructor_marks_list;
+    vector<pair<string, float>> student_marks_list = instructor_marks_list.getMarksList(files);
+    int i;
+    for(i=0;i<student_marks_list.size();i++)
+    {
+        if(student_marks_list[i].first == student)
+        break;
+    }
+    return student_marks_list[i].second ;
+}
+
 void initialize()
 {
-	string AdminName = "leo";
-    string student = "ron";
-	vector<string> instructor;
-	for(int i=0; i<10; i++)
+	Student student;
+	studentName = "student1";
+
+	vector<string> course_list = student.getCourses("./Students/" + studentName + ".txt");
+
+	vector< int > marks;
+
+	int i;
+	int space = 15;
+	for(i=0;i<course_list.size();i++)
 	{
-		instructor.push_back("Instructor" + to_string(i+1));
+		marks.push_back(get_marks(course_list[i],studentName));
 	}
 
-	vector<int> marks;
-	for(int i=0; i<10; i++)
-	{
-		marks.push_back(i+1);
-	}
-    StudentMarks(AdminName, instructor, student, marks);
+	/*
+	cout<<setw(space)<<"Courses:-";
+	for(i=0;i<course_list.size();i++)
+		cout<<setw(space)<<course_list[i];
+	cout<<endl;
+	cout<<setw(space)<<studentName;
+	for(i=0;i<marks.size();i++)
+		cout<<setw(space)<<marks[i];
+	cout<<endl;
+	cout<<setw(space)<<"Mean :";
+	for(i=0;i<course_list.size();i++)
+		cout<<setw(space)<<get_mean(course_list[i]);
+	cout<<endl;
+	*/
+	
+	StudentMarks(studentName, course_list, studentName, marks);
 }

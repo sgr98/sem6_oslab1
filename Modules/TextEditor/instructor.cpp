@@ -1,12 +1,15 @@
 #include "content.h"
 #include <iostream>
 #include <vector>
-#include "editor.h"
+#include "editor.h" 
+#include "./../InstructorMarksList/instructor_marks_list.h"
 using namespace std;
 
 
-void StudentMarks(string AdminName, vector<string> Students, string Instructor, vector<int> marks)
-{
+int currentHistory;
+string instructorName = "faculty1";
+
+void StudentMarks(string AdminName, vector<string> Students, string Instructor, vector<int> marks) {
 	lines.clear();
 	Element* e1 = new Element( 20, "Instructor DashBoard", STRING, false, true, GREEN, false );
 	vector<Element*>* elements1 = new vector<Element*>;
@@ -66,17 +69,19 @@ void StudentMarks(string AdminName, vector<string> Students, string Instructor, 
 	lines.push_back(NULL);
 	vector<Element*>** save = new vector<Element*>*;
 	*save = new vector<Element*>;	
-	//(*go_back)->push_back(new Element( 4, "    " , STRING, false, false, RED, false));
 	(*save)->push_back(new Element( 8, "Save" , STRING, false, true, BLUE, true));
+	(*save)->push_back(new Element( 8, "      " , STRING, false, true, BLUE, false));
+	(*save)->push_back(new Element( 8, "Exit" , STRING, false, true, BLUE, true));
 	
 	Line* l5 = new Line(*save, CENTER);
 	lines.push_back(l5);
 
 
+	lines.push_back(NULL);
     vector<Element*>** exit = new vector<Element*>*;
 	*exit = new vector<Element*>;	
 	//(*go_back)->push_back(new Element( 4, "    " , STRING, false, false, RED, false));
-	(*exit)->push_back(new Element( 8, "Exit" , STRING, false, true, BLUE, true));
+	(*exit)->push_back(new Element( 9, "Download" , STRING, false, true, BLUE, true));
 	
 	Line* l6 = new Line(*exit, CENTER);
 	lines.push_back(l6);
@@ -87,10 +92,15 @@ void StudentMarks(string AdminName, vector<string> Students, string Instructor, 
 	*h0 = new vector<Element*>;	
 	//(*go_back)->push_back(new Element( 4, "    " , STRING, false, false, RED, false));
 	(*h0)->push_back(new Element( 10, "History 0" , STRING, false, true, BLUE, true));
+	(*h0)->push_back(new Element( 10, "      " , STRING, false, true, BLUE, false));
+	(*h0)->push_back(new Element( 10, "History 1" , STRING, false, true, BLUE, true));
+	(*h0)->push_back(new Element( 10, "      " , STRING, false, true, BLUE, false));
+	(*h0)->push_back(new Element( 10, "History 2" , STRING, false, true, BLUE, true));
 	
-	Line* l7 = new Line(*h0, LEFT);
+	Line* l7 = new Line(*h0, CENTER);
 	lines.push_back(l7);
 
+	/*
     vector<Element*>** h1 = new vector<Element*>*;
 	*h1 = new vector<Element*>;	
 	//(*go_back)->push_back(new Element( 4, "    " , STRING, false, false, RED, false));
@@ -106,6 +116,7 @@ void StudentMarks(string AdminName, vector<string> Students, string Instructor, 
 	
 	Line* l9 = new Line(*h2, RIGHT);
 	lines.push_back(l9);
+	*/
 
 }
 
@@ -136,6 +147,89 @@ void editorProcessKeypress()
 
 void handleButtonClick( string selection )
 {
+	if( selection == "Download" )
+	{
+		InstructorMarksList instructor_marks_list;
+
+		string prefix = "./Instructors/" + instructorName + "/hist" + to_string(currentHistory-1) + ".txt";
+		string filename = "Marks" + to_string(currentHistory-1) + ".txt";
+		instructor_marks_list.downloadAllinstructorMarks(prefix, filename);
+	}
+	else if( selection ==  "Save" )
+	{
+		InstructorMarksList instructor_marks_list;
+
+		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Instructors/" + instructorName + "/hist0.txt");
+
+		list[0].second = 48;
+		list[1].second = 49;
+		
+		string prefix = "./Instructors/" + instructorName + "/hist";
+
+		instructor_marks_list.setInstructorMarkList( list );
+		
+		instructor_marks_list.saveEdit(prefix + "0.txt", prefix + "1.txt", prefix + "2.txt" );
+	}
+	else if( selection == "History 0" )
+	{
+		currentHistory = 1;
+		instructorName = "faculty1";
+
+		InstructorMarksList instructor_marks_list;
+
+		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Instructors/" + instructorName + "/hist0.txt");
+
+		vector<string> studentList;
+		vector<int> marks;
+
+		for(int i=0; i< list.size(); i++)
+		{
+			studentList.push_back(list[i].first);
+			marks.push_back((int)list[i].second);
+		}
+
+		StudentMarks(instructorName, studentList, instructorName, marks);
+	}
+	else if( selection == "History 1" )
+	{
+		currentHistory = 2;
+		instructorName = "faculty1";
+
+		InstructorMarksList instructor_marks_list;
+
+		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Instructors/" + instructorName + "/hist1.txt");
+
+		vector<string> studentList;
+		vector<int> marks;
+
+		for(int i=0; i< list.size(); i++)
+		{
+			studentList.push_back(list[i].first);
+			marks.push_back((int)list[i].second);
+		}
+
+		StudentMarks(instructorName, studentList, instructorName, marks);
+	}
+	else if( selection == "History 2" )
+	{
+		currentHistory = 3;
+		instructorName = "faculty1";
+
+		InstructorMarksList instructor_marks_list;
+
+		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Instructors/" + instructorName + "/hist2.txt");
+
+		vector<string> studentList;
+		vector<int> marks;
+
+		for(int i=0; i< list.size(); i++)
+		{
+			studentList.push_back(list[i].first);
+			marks.push_back((int)list[i].second);
+		}
+
+		StudentMarks(instructorName, studentList, instructorName, marks);
+	}
 	return;
 } 
 
@@ -159,18 +253,21 @@ bool enterEditorMode( int* x, int* y )
 
 void initialize()
 {
-	string AdminName = "leo";
-    string instructor = "ron";
+	currentHistory = 1;
+	instructorName = "faculty1";
+
+	InstructorMarksList instructor_marks_list;
+
+	vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Instructors/" + instructorName + "/hist0.txt");
+
 	vector<string> studentList;
-	for(int i=0; i<10; i++)
+	vector<int> marks;
+
+	for(int i=0; i< list.size(); i++)
 	{
-		studentList.push_back("Student" + to_string(i+1));
+		studentList.push_back(list[i].first);
+		marks.push_back((int)list[i].second);
 	}
 
-	vector<int> marks;
-	for(int i=0; i<10; i++)
-	{
-		marks.push_back(i+1);
-	}
-    StudentMarks(AdminName, studentList, instructor, marks);
+	StudentMarks(instructorName, studentList, instructorName, marks);
 }

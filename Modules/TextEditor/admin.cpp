@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "editor.h"
+#include "adminHelper.h"
 using namespace std;
 
 //adminMenu = 1
@@ -217,6 +218,107 @@ void ListOfusers( string adminName, vector<string> userList )
 	lines.push_back(*l);
 }
 
+void addStudent()
+{
+	ExitEditorMode();
+	cout << "Enter the username of the Student" << endl;
+	string username;
+	cin >> username;
+	if( !checkIfUserExists(username) )
+	{
+		createStudent( username );
+	}
+	else
+	{
+		cout << "User with the name '" << username << "' already exists" << endl;
+	}
+	enterEditorMode();
+}
+
+void addInstructor()
+{
+	ExitEditorMode();
+	cout << "Enter the username of the Instructor" << endl;
+	string username;
+	cin >> username;
+	if( !checkIfUserExists(username) )
+	{
+		createInstructor(username);
+	}
+	else
+	{
+		cout << "User with the name '" << username << "' already exists" << endl;
+	}
+	enterEditorMode();
+}
+
+void addHod()
+{
+	ExitEditorMode();
+	cout << "Enter the username of the HOD" << endl;
+	string username;
+	cin >> username;
+	if( !checkIfUserExists(username) )
+	{
+		createHod(username);
+	}
+	else
+	{
+		cout << "User with the name '" << username << "' already exists" << endl;
+	}
+	enterEditorMode();
+}
+
+void rmStudent()
+{
+	ExitEditorMode();
+	cout << "Enter the username of the Student" << endl;
+	string username;
+	cin >> username;
+	if( checkIfUserExists(username) )
+	{
+		removeStudent(username);
+	}
+	else
+	{
+		cout << "User with the name '" << username << "' doesn't exist" << endl;
+	}
+	enterEditorMode();
+}
+
+void rmInstructor()
+{
+	ExitEditorMode();
+	cout << "Enter the username of the Instructor" << endl;
+	string username;
+	cin >> username;
+	if( checkIfUserExists(username) )
+	{
+		removeInstructor(username);
+	}
+	else
+	{
+		cout << "User with the name '" << username << "' doesn't exist" << endl;
+	}
+	enterEditorMode();
+}
+
+void rmHod()
+{
+	ExitEditorMode();
+	cout << "Enter the username of the Hod" << endl;
+	string username;
+	cin >> username;
+	if( checkIfUserExists(username) )
+	{
+		removeHod(username);
+	}
+	else
+	{
+		cout << "User with the name '" << username << "' doesn't exist" << endl;
+	}
+	enterEditorMode();
+}
 void handleButtonClick( string selection )
 {
 	cout << "selection = " << selection << endl;
@@ -259,6 +361,30 @@ void handleButtonClick( string selection )
 			}
 			StudentMarks(instructor, studentList, marks);
 		}
+		else if( selection == "Add Student" )
+		{
+			addStudent();
+		}
+		else if( selection == "Add Instructor" )
+		{
+			addInstructor();
+		}
+		else if( selection == "Add Hod" )
+		{
+			addHod();
+		}
+		else if( selection == "Remove Student" )
+		{
+			rmStudent();
+		}
+		else if( selection == "Remove Instructor" )
+		{
+			rmInstructor();
+		}
+		else if( selection == "Remove Hod" )
+		{
+			rmHod();
+		}
 	}
 	else if( currentPage == 2 )
 	{
@@ -286,7 +412,6 @@ bool enterEditorMode( int* x, int* y )
 	{
 		if( (*(*lines[*y]).elements)[j]->start == *x )
 		{
-			(*(*lines[*y]).elements)[j]->underlined = true;
 			if( (*(*lines[*y]).elements)[j]->clickable == false )
 			{
 				return false;
