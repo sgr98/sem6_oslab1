@@ -9,7 +9,13 @@
 #include <unistd.h>
 #include <iostream>
 #include "content.h"
+#include "editor.h"
+#include <chrono>
+#include <thread>
 
+
+int editorOrNot = 1;
+/*
 enum mode
 {
 	EDIT,
@@ -32,10 +38,10 @@ struct editorConfig
 
 	int mode;
 };
-
+*/
 struct editorConfig E;
 
-
+/*
 //mappings for keypresses
 enum editorKey
 {
@@ -46,6 +52,7 @@ enum editorKey
 	ARROW_DOWN,
 	DEL_KEY,
 };
+*/
 
 //function to handle error
 void die( const char* s )
@@ -97,6 +104,13 @@ void exitRawMode()
 	printf("\033[?47l");
 	printf("\033[u");
 	printf("\033[?25h");
+}
+
+void ExitEditorMode()
+{
+	disableRawMode();
+	exitRawMode();
+	editorOrNot = 2;
 }
 
 //function to read the character entered
@@ -220,12 +234,14 @@ int getWindowSize( int* rows, int* cols )
 	}
 }
 
+/*
 //buffer that contains the entire output to be displayed
 struct abuf
 {
 	char* b;
 	int len;
 };
+*/
 
 #define ABUF_INIT {NULL, 0}
 
@@ -259,29 +275,10 @@ void editorDrawRows( struct abuf* ab )
 
 	for( int i = 0 ; i < E.screenrows ; i++ )
 	{
-		//if we complete printing all rows then insert tildes for remaining screen
 		if( i < content.size() )
 		{
 			abAppend(ab, content[i].c_str(), content[i].size());
 		}
-		/*
-		if( i == E.screenrows/2 )
-		{
-			char text[80];
-			int textlen = snprintf(text, sizeof(text), "this is a test message");
-
-			if( textlen > E.screencols)
-			{
-				textlen = E.screencols;
-			}
-			int padding = (E.screencols - textlen)/2;
-			while( padding-- )
-			{
-				abAppend(ab, " ",1);
-			}
-			abAppend(ab, text, textlen);
-		}
-		*/
 		abAppend(ab, "\x1b[K", 3);
 		if( i < E.screenrows -1 )
 		{
@@ -382,80 +379,42 @@ void initEditor()
 	cout << E.cx << " " << E.cy << endl;
 }
 
-//function to say what to do with the character entered
-void editorProcessKeypress()
+void keepRefreshing()
 {
-	int c = editorReadKey();
-
-	switch(c)
-	{
-		//if entered enter key save the value and go to navigation mode
-		case '\n':
-		case '\r':
-			E.mode = NAVIGATION;
-			exitEditorMode(&E.cx, &E.cy);
-			break;
-		//if entered q then exit the program
-		case'q':
-			//clear the screen the reposition the cursor
-			exitRawMode();
-			exit(0);
-			break;
-		case 'x':
-			enableRawMode();
-			initEditor();
-			break;
-		case 'y':
-			exitRawMode();
-		case 'i':
-			if( enterEditorMode(&E.cx, &E.cy) )
-			{
-				E.mode = EDIT;
-			}
-			break;
-		case '\033':
-			E.mode = NAVIGATION;
-			exitEditorMode(&E.cx, &E.cy);
-			break;	
-		//handle arrow keys press
-		case ARROW_UP:
-		case ARROW_DOWN:
-		case ARROW_LEFT:
-		case ARROW_RIGHT:
-			if( E.mode == NAVIGATION )
-			{
-				editorMoveCursor(c);
-			}
-			break;
-		//handle delete key
-		case DEL_KEY:
-			break;
-		//handle backspace key
-		case BACKSPACE:
-			if( E.mode == EDIT )
-			{
-				handleBackSpace(&E.cx, &E.cy);
-			}
-			break;
-		default:
-			if( E.mode == EDIT )
-			{
-				insertChar(&E.cx, &E.cy, c);
-			}
-			break;
-	}
-}
-
-int main() 
-{
-	initialize();
-	enableRawMode();
-	initEditor();
-
 	while(true)
 	{
 		editorRefreshScreen();
 		editorProcessKeypress();
+		if( editorOrNot != 1 )
+		{
+			exitRawMode();
+			return;
+		}
 	}
+}
+
+void enterEditorMode()
+{
+	std::this_thread::sleep_for(std::chrono::milliseconds(2000)); // sleep for 3 second
+	editorOrNot = 1;
+	enableRawMode();
+	initEditor();
+	keepRefreshing();
+}
+
+int main()
+{
+	initialize();
+
+	enterEditorMode();
+	
+	/*
+	string str;
+	cin >> str;
+
+	cout << str << endl;
+
+	enterEditorMode();
 	return 0;
+	*/
 }

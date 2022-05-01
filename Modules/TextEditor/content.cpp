@@ -3,90 +3,6 @@
 #include <vector>
 using namespace std;
 
-
-/*
-enum position
-{
-	CENTER = 0,
-	LEFT,
-	RIGHT,
-};
-
-enum color
-{
-	BLUE,
-	RED,
-	GREEN,
-	BLACK,
-};
-
-enum type
-{
-	INT = 0,
-	STRING,
-	CHAR,
-};
-
-class Element
-{
-	public:
-	int size;
-	int type;
-	string content;
-	bool editable;
-	bool bold;
-	int color;
-	int start; 
-	bool underlined;
-	bool invert;
-	int end;
-	bool clickable;
-
-
-	Element( int size, string content, int type , bool editable, bool bold, int color, bool clickable)
-	{
-		this->size = size;
-		this->type = type;
-		this->editable = editable;
-		this->bold = bold;
-		this->color = color;
-		this->start = 0;
-		this->end = 0;
-		this->underlined = 0;
-		this->invert = 0;
-		this->clickable = clickable;
-		setString(content);
-	}
-
-	void setString(string content)
-	{
-		if( content.size() > size )
-		{
-			this->content = content.substr(0, size);
-		}
-		else
-		{
-			this->content = content;
-		}
-	}
-};
-
-
-class Line
-{
-	public:
-	vector<Element*>* elements;
-	int position;
-
-	Line( vector<Element*>* elements , int position )
-	{
-		this->elements = elements;
-		this->position = position;
-	}
-};
-
-*/
-
 Element::Element( int size, string content, int type , bool editable, bool bold, int color, bool clickable)
 {
 	this->size = size;
@@ -134,13 +50,7 @@ string getLine( Line* l, int cols )
 	{
 		totalsize += elements[i]->size;
 	}
-	/*
-	   if( totalsize > cols )
-	   {
-	   return "";
-	   }
-	 */
-
+	
 	switch( l->position )
 	{
 		case CENTER:
@@ -389,86 +299,6 @@ void unfocus( int x, int y )
 		if( (*(*lines[y]).elements)[j]->start == x )
 		{
 			(*(*lines[y]).elements)[j]->invert = false;
-			return;
-		}
-	}
-}
-
-bool enterEditorMode( int* x, int* y )
-{
-	for( int j = 0 ; j < (*(*lines[*y]).elements).size() ; j++ )
-	{
-		if( (*(*lines[*y]).elements)[j]->start == *x )
-		{
-			if( (*(*lines[*y]).elements)[j]->editable == false )
-			{
-				return false;
-			}
-			(*(*lines[*y]).elements)[j]->underlined = true;
-			(*(*lines[*y]).elements)[j]->invert = false;
-			int size = (*(*lines[*y]).elements)[j]->content.size();
-			*x = (*(*lines[*y]).elements)[j]->start + size;
-
-			return true;
-		}
-	}
-	return false;
-}
-
-void exitEditorMode( int* x, int* y)
-{
-	for( int j = 0 ; j < (*(*lines[*y]).elements).size() ; j++ )
-	{
-		if( (*(*lines[*y]).elements)[j]->start <= *x and (*(*lines[*y]).elements)[j]->end >= *x)
-		{
-			if( (*(*lines[*y]).elements)[j]->content.size() == 0 )
-			{
-				(*(*lines[*y]).elements)[j]->content = "0";
-			}
-			(*(*lines[*y]).elements)[j]->underlined = false;
-			(*(*lines[*y]).elements)[j]->invert = true;
-			*x = (*(*lines[*y]).elements)[j]->start;
-		}
-	}
-}
-
-void handleBackSpace( int* x, int* y )
-{
-	for( int j = 0 ; j < (*(*lines[*y]).elements).size() ; j++ )
-	{
-		int size = (*(*lines[*y]).elements)[j]->content.size();
-		if( (*(*lines[*y]).elements)[j]->start + size == *x )
-		{
-			string str = (*(*lines[*y]).elements)[j]->content;
-			(*(*lines[*y]).elements)[j]->content = str.substr(0, str.length()-1);
-			size = (*(*lines[*y]).elements)[j]->content.size();
-			*x = (*(*lines[*y]).elements)[j]->start + size;
-			return;
-		}
-	}
-}
-
-void insertChar( int* x, int* y , int c)
-{
-	for( int j = 0 ; j < (*(*lines[*y]).elements).size() ; j++ )
-	{
-		int size = (*(*lines[*y]).elements)[j]->content.size();
-		if( (*(*lines[*y]).elements)[j]->start + size == *x )
-		{
-			if( (*(*lines[*y]).elements)[j]->type == INT )
-			{
-				if( c < (int)'0' or c > (int)'9' )
-				{
-					return;
-				}
-			}
-			string str = (*(*lines[*y]).elements)[j]->content;
-			if( str.size() < (*(*lines[*y]).elements)[j]->size - 1)
-			{
-				(*(*lines[*y]).elements)[j]->content = str + (char)c;
-			}
-			size = (*(*lines[*y]).elements)[j]->content.size();
-			*x = (*(*lines[*y]).elements)[j]->start + size;
 			return;
 		}
 	}
