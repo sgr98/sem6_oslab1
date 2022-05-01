@@ -12,6 +12,23 @@
 
 using namespace std;
 
+string padString(string s, int n) {
+    if(n % 4 == 0)
+        n += 4;
+    else
+        n += (n % 4);
+
+    string t = "";
+    for(int i = 0; i < n; i++) {
+        if(i >= s.length()) {
+            t += " ";
+            continue;
+        }
+        t += s[i];
+    }
+    return t;
+}
+
 void printAllStudentInstructorMarks(vector<pair<string, vector<float>>> allStudentInstructorMarks) {
     int size = allStudentInstructorMarks.size();
     for(int i = 0; i < size; i++) {
@@ -89,18 +106,42 @@ vector<pair<string, vector<float>>> getAllStudentInstructorMarks(vector<pair<str
     return allStudentInstructorMarks;
 }
 
-string getAllStudentInstructorMarksString(vector<pair<string, vector<float>>> allStudentInstructorMarks) {
+string getAllStudentInstructorMarksString(vector<pair<string, string>> instructor_and_files, vector<pair<string, vector<float>>> allStudentInstructorMarks) {
     string asim_string = "";
+
+    pair<int, int> stringPads;
+    stringPads.first = 0;
+    stringPads.second = 0;
+    int sz = allStudentInstructorMarks.size();
+    for(int i = 0; i < sz; i++) {
+        if(stringPads.first < allStudentInstructorMarks[i].first.length())
+            stringPads.first = allStudentInstructorMarks[i].first.length();
+    }
+    stringPads.first += 2;
+    sz = instructor_and_files.size();
+    for(int i = 0; i < sz; i++) {
+        if(stringPads.second < instructor_and_files[i].first.length())
+            stringPads.second = instructor_and_files[i].first.length();
+    }
+    stringPads.second += 2;
+    if(stringPads.second < 16)
+        stringPads.second = 16;
+
+    asim_string += padString("", stringPads.first);
+    for(int i = 0; i < sz; i++) {
+        asim_string += padString(instructor_and_files[i].first, stringPads.second);
+    }
+    asim_string += "\n";
 
     int size = allStudentInstructorMarks.size();
     for(int i = 0; i < size; i++) {
-        asim_string += (allStudentInstructorMarks[i].first + "\t");
+        asim_string += padString(allStudentInstructorMarks[i].first, stringPads.first);
         int n = allStudentInstructorMarks[i].second.size();
         for(int j = 0; j < n; j++) {
             if(allStudentInstructorMarks[i].second[j] == SHRT_MIN)
-                asim_string += "--\t";
+                asim_string += padString("--", stringPads.second);
             else
-                asim_string += (to_string(allStudentInstructorMarks[i].second[j]) + "\t");
+                asim_string += padString(to_string(allStudentInstructorMarks[i].second[j]), stringPads.second);
         }
         asim_string += "\n";
     }
@@ -114,7 +155,7 @@ void downloadAllStudentsInstructorMarks(string fileStr, vector<pair<string, stri
 	strcpy(fileName, fileStr.c_str());
 
     vector<pair<string, vector<float>>> allStudentInstructorMarks = getAllStudentInstructorMarks(instructor_and_files);
-    string asim_string = getAllStudentInstructorMarksString(allStudentInstructorMarks);
+    string asim_string = getAllStudentInstructorMarksString(instructor_and_files, allStudentInstructorMarks);
 	
     asim_string = asim_string.substr(0, asim_string.length() - 1);
     len = asim_string.length();
@@ -122,7 +163,7 @@ void downloadAllStudentsInstructorMarks(string fileStr, vector<pair<string, stri
 	strcpy(asim, asim_string.c_str());
 
     int fd = -1;
-    fd = open(fileName, O_WRONLY);
+    fd = open(fileName, O_WRONLY);		// Add O_CREAT and proper PERMISSIONS
 
     // if(truncate(fileName, 0) == -1) {
 	// 	perror("Could not truncate");
@@ -132,4 +173,5 @@ void downloadAllStudentsInstructorMarks(string fileStr, vector<pair<string, stri
 		cout << "Error opening file " << fileName << endl;
 
 	write(fd, asim, len);
+    close(fd);
 }

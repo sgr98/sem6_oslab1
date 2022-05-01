@@ -365,3 +365,68 @@ int InstructorMarksList::revertHistory2(string fileStr0, string fileStr1, string
 
 	return 1;
 }
+
+string InstructorMarksList::padString(string s, int n) {
+    if(n % 4 == 0)
+        n += 4;
+    else
+        n += (n % 4);
+
+    string t = "";
+    for(int i = 0; i < n; i++) {
+        if(i >= s.length()) {
+            t += " ";
+            continue;
+        }
+        t += s[i];
+    }
+    return t;
+}
+
+string InstructorMarksList::getAllInstructorMarksString(vector<pair<string, float>> student_marks_list) {
+	string aim_string = "";
+
+	int stringPads;
+    stringPads = 0;
+    int size = student_marks_list.size();
+    for(int i = 0; i < size; i++) {
+        if(stringPads < student_marks_list[i].first.length())
+            stringPads = student_marks_list[i].first.length();
+    }
+    stringPads += 2;
+
+	for(int i = 0; i < size; i++) {
+        aim_string += padString(student_marks_list[i].first, stringPads);
+		aim_string += to_string(student_marks_list[i].second);
+		aim_string += "\n";
+    }
+
+	return aim_string;
+}
+
+void InstructorMarksList::downloadAllinstructorMarks(string instructorFilePath, string downloadFileStr) {
+	int len = downloadFileStr.length();
+	char fileName[len + 1];
+	strcpy(fileName, downloadFileStr.c_str());
+
+	vector<pair<string, float>> student_marks_list = getMarksList(instructorFilePath);
+    string aim_string = getAllInstructorMarksString(student_marks_list);
+	
+    aim_string = aim_string.substr(0, aim_string.length() - 1);
+    len = aim_string.length();
+	char aim[len + 1];
+	strcpy(aim, aim_string.c_str());
+
+    int fd = -1;
+    fd = open(fileName, O_WRONLY);		// Add O_CREAT and proper PERMISSIONS
+
+    // if(truncate(fileName, 0) == -1) {
+	// 	perror("Could not truncate");
+	// }
+
+    if(fd < 0)
+		cout << "Error opening file " << fileName << endl;
+
+	write(fd, aim, len);
+	close(fd);
+}

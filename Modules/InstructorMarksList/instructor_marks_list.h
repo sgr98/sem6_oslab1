@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <cstring>
 #include <string>
 #include <vector>
@@ -51,4 +52,11 @@ class InstructorMarksList {
 		int revertHistory1(string fileStr0, string fileStr1);
 		// Revert to History 2
 		int revertHistory2(string fileStr0, string fileStr1, string fileStr2);
+
+		// Pad a string with given amount of white spaces
+		string padString(string s, int n);
+		// Get string value of all marks of instructors
+		string getAllInstructorMarksString(vector<pair<string, float>> student_marks_list);
+		// Download all marks of instructors in a file
+		void downloadAllinstructorMarks(string instructorFilePath, string downloadFileStr);
 };

@@ -40,7 +40,7 @@ int main() {
 			break;
 		else if(c == 1) {
             vector<pair<string, vector<float>>> allStudentInstructorMarks = getAllStudentInstructorMarks(instructor_and_files);
-			string asim_string = getAllStudentInstructorMarksString(allStudentInstructorMarks);
+			string asim_string = getAllStudentInstructorMarksString(instructor_and_files, allStudentInstructorMarks);
 			cout << asim_string << endl;
 		}
 		else if(c == 2) {

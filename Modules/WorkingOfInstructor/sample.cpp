@@ -43,6 +43,7 @@ int main() {
 		cout << "8: Save Edit" << endl;
 		cout << "9: Revert to History 1" << endl;
 		cout << "10: Revert to History 2" << endl;
+		cout << "11: Download Marks" << endl;
 		cout << "------------------------------------------\n";
 
 		int c;
@@ -130,6 +131,14 @@ int main() {
 		else if(c == 10) {
 			if(!unsaved)
 				instructor_marks_list.revertHistory2(fileName0, fileName1, fileName2);
+			else
+				cout << "Please save or unsave the file first" << endl;
+		}
+		else if(c == 11) {
+			if(!unsaved) {
+				string downloadStr = "marks_download.txt";
+				instructor_marks_list.downloadAllinstructorMarks(fileName0, downloadStr);
+			}
 			else
 				cout << "Please save or unsave the file first" << endl;
 		}
