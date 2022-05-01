@@ -11,12 +11,9 @@ task done:
 		4) remove instructor
 		5) add hod
 		6) remove hod
-		7) add another admin
-		8) remove admin
-		9) show all users
-		10) promote a user to other actor.
-		10) view a students marks
-		12) view log file
+		7) show all users
+		8) view a students marks
+		9) view log file
 	
 		1,2,5,7) 
 			all are similar in creation, accordingly set them permissions and add them to groups, create any folders for them.
