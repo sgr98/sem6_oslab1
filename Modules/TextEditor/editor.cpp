@@ -69,6 +69,9 @@ void disableRawMode()
 //Enables Raw Mode
 void enableRawMode() 
 {
+	printf("\033[s");
+	printf("\033[?47h");
+
 	if( tcgetattr(STDIN_FILENO, &E.orig_termios) == -1 )
 	{
 		die("tcsetattr");
@@ -85,6 +88,15 @@ void enableRawMode()
 	{
 		die("tcsetattr");
 	}
+}
+
+void exitRawMode()
+{
+	write(STDOUT_FILENO, "\x1b[2J", 4);
+	write(STDOUT_FILENO, "\x1b[H", 3);
+	printf("\033[?47l");
+	printf("\033[u");
+	printf("\033[?25h");
 }
 
 //function to read the character entered
@@ -356,6 +368,20 @@ void editorMoveCursor( int key )
 	}
 }
 
+//initialize the editor
+void initEditor()
+{
+	if( getWindowSize( &E.screenrows, &E.screencols ) == -1 )
+	{
+		die("getWIndowSize");
+	}
+	getContent( E.screenrows, E.screencols );
+	getStartPos(&E.cx, &E.cy);
+	focus(E.cx, E.cy);
+	E.mode = NAVIGATION;
+	cout << E.cx << " " << E.cy << endl;
+}
+
 //function to say what to do with the character entered
 void editorProcessKeypress()
 {
@@ -372,13 +398,15 @@ void editorProcessKeypress()
 		//if entered q then exit the program
 		case'q':
 			//clear the screen the reposition the cursor
-			write(STDOUT_FILENO, "\x1b[2J", 4);
-			write(STDOUT_FILENO, "\x1b[H", 3);
-			printf("\033[?47l");
-			printf("\033[u");
-			printf("\033[?25h");
+			exitRawMode();
 			exit(0);
 			break;
+		case 'x':
+			enableRawMode();
+			initEditor();
+			break;
+		case 'y':
+			exitRawMode();
 		case 'i':
 			if( enterEditorMode(&E.cx, &E.cy) )
 			{
@@ -418,25 +446,8 @@ void editorProcessKeypress()
 	}
 }
 
-
-//initialize the editor
-void initEditor()
-{
-	if( getWindowSize( &E.screenrows, &E.screencols ) == -1 )
-	{
-		die("getWIndowSize");
-	}
-	getContent( E.screenrows, E.screencols );
-	getStartPos(&E.cx, &E.cy);
-	focus(E.cx, E.cy);
-	E.mode = NAVIGATION;
-	cout << E.cx << " " << E.cy << endl;
-}
-
 int main() 
 {
-	printf("\033[s");
-	printf("\033[?47h");
 	initialize();
 	enableRawMode();
 	initEditor();

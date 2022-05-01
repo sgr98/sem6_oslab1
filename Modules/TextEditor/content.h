@@ -19,4 +19,60 @@ void exitEditorMode(int*, int*);
 void handleBackSpace(int*, int*);
 void insertChar(int*, int*, int);
 
+
+enum position
+{
+	CENTER = 0,
+	LEFT,
+	RIGHT,
+};
+
+enum color
+{
+	BLUE,
+	RED,
+	GREEN,
+	BLACK,
+};
+
+enum type
+{
+	INT = 0,
+	STRING,
+	CHAR,
+};
+
+class Element
+{
+	public:
+	int size;
+	int type;
+	string content;
+	bool editable;
+	bool bold;
+	int color;
+	int start; 
+	bool underlined;
+	bool invert;
+	int end;
+	bool clickable;
+
+
+	Element( int size, string content, int type , bool editable, bool bold, int color, bool clickable);
+
+	void setString(string content);
+};
+
+
+class Line
+{
+	public:
+	vector<Element*>* elements;
+	int position;
+
+	Line( vector<Element*>* elements , int position );
+};
+
+extern vector<Line*> lines;
+
 #endif
