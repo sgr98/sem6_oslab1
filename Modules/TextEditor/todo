@@ -4,10 +4,13 @@
 -	remove users - admin , files - done
 -	populate view all users	 - done
 -	log file
--	add student in instructor
+-	add student in instructor	-done
 - 	making a package is necessary
 
 if we don't have our presentation tomorrow
 -	share marks
 -	free bsd
--	
+
+
+- add student - add mark - save after adding	
+- remove student - remove mark - save after removing

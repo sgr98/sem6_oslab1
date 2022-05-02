@@ -3,7 +3,7 @@
 #include<unistd.h>
 #include<vector>
 #include<string.h>
-#include "adminHelper.h"
+#include"adminHelper.h"
 #include<sys/stat.h>
 using namespace std;
 
@@ -71,7 +71,7 @@ vector<string> getGroupsBelonging( string username )
 	vector<string> lines;
 	while( token != NULL )
 	{
-		lines.push_back(token);
+		lines.push_back(string(token));
 		token = strtok(NULL,"\n");
 	}
 
@@ -84,7 +84,7 @@ vector<string> getGroupsBelonging( string username )
 		token = strtok(t, ":");
 		while( token != NULL )
 		{
-			words.push_back(token);
+			words.push_back(string(token));
 			token = strtok(NULL, ":");
 		}
 
@@ -99,7 +99,7 @@ vector<string> getGroupsBelonging( string username )
 				token = strtok(s, ",");
 				while( token != NULL )
 				{
-					listOfUsers.push_back(token);
+					listOfUsers.push_back(string(token));
 					token = strtok(NULL, ",");
 				}
 				for( int j = 0 ; j < listOfUsers.size() ; j++ )
@@ -197,32 +197,32 @@ void createInstructor( string username)
 {
 	createUser(username);
 	addUserGroup( username, "Faculty" );
-	createDirectory("Instructors/" + username);
-	setPermissions("setfacl -m g:studentsexecute:rwx Instructors/" + username);
+	createDirectory("./Database/Instructors/" + username);
+	setPermissions("setfacl -m g:studentsexecute:rwx ./Database/Instructors/" + username);
 	
-	createFile("Instructors/" + username + "/hist0.txt");
-	setPermissions("setfacl -m g:studentsexecute:r-- Instructors/" + username + "/hist0.txt");
-	setPermissions("setfacl -m g::--- Instructors/" + username + "/hist0.txt");
-	setPermissions("setfacl -m u::rwx Instructors/" + username + "/hist0.txt");
-	setPermissions("setfacl -m o::--- Instructors/" + username + "/hist0.txt");
-	setPermissions("sudo chown " + username + ": Instructors/" + username + "/hist0.txt");
+	createFile("./Database/Instructors/" + username + "/hist0.txt");
+	setPermissions("setfacl -m g:studentsexecute:r-- ./Database/Instructors/" + username + "/hist0.txt");
+	setPermissions("setfacl -m g::--- ./Database/Instructors/" + username + "/hist0.txt");
+	setPermissions("setfacl -m u::rwx ./Database/Instructors/" + username + "/hist0.txt");
+	setPermissions("setfacl -m o::--- ./Database/Instructors/" + username + "/hist0.txt");
+	setPermissions("sudo chown " + username + ": ./Database/Instructors/" + username + "/hist0.txt");
 
-	createFile("Instructors/" + username + "/hist1.txt");
-	setPermissions("setfacl -m g:studentsexecute:r-- Instructors/" + username + "/hist1.txt");
-	setPermissions("setfacl -m g::--- Instructors/" + username + "/hist1.txt");
-	setPermissions("setfacl -m u::rwx Instructors/" + username + "/hist1.txt");
-	setPermissions("setfacl -m o::--- Instructors/" + username + "/hist1.txt");
-	setPermissions("sudo chown " + username + ": Instructors/" + username + "/hist1.txt");
+	createFile("./Database/Instructors/" + username + "/hist1.txt");
+	setPermissions("setfacl -m g:studentsexecute:r-- ./Database/Instructors/" + username + "/hist1.txt");
+	setPermissions("setfacl -m g::--- ./Database/Instructors/" + username + "/hist1.txt");
+	setPermissions("setfacl -m u::rwx ./Database/Instructors/" + username + "/hist1.txt");
+	setPermissions("setfacl -m o::--- ./Database/Instructors/" + username + "/hist1.txt");
+	setPermissions("sudo chown " + username + ": ./Database/Instructors/" + username + "/hist1.txt");
 
-	createFile("Instructors/" + username + "/hist2.txt");
-	setPermissions("setfacl -m g:studentsexecute:r-- Instructors/" + username + "/hist2.txt");
-	setPermissions("setfacl -m g::--- Instructors/" + username + "/hist2.txt");
-	setPermissions("setfacl -m u::rwx Instructors/" + username + "/hist2.txt");
-	setPermissions("setfacl -m o::--- Instructors/" + username + "/hist2.txt");
-	setPermissions("sudo chown " + username + ": Instructors/" + username + "/hist2.txt");
+	createFile("./Database/Instructors/" + username + "/hist2.txt");
+	setPermissions("setfacl -m g:studentsexecute:r-- ./Database/Instructors/" + username + "/hist2.txt");
+	setPermissions("setfacl -m g::--- ./Database/Instructors/" + username + "/hist2.txt");
+	setPermissions("setfacl -m u::rwx ./Database/Instructors/" + username + "/hist2.txt");
+	setPermissions("setfacl -m o::--- ./Database/Instructors/" + username + "/hist2.txt");
+	setPermissions("sudo chown " + username + ": ./Database/Instructors/" + username + "/hist2.txt");
 	
 
-	setPermissions("sudo chown " + username + ": Instructors/" + username);
+	setPermissions("sudo chown " + username + ": ./Database/Instructors/" + username);
 }
 
 void createStudent( string  username )
@@ -230,12 +230,12 @@ void createStudent( string  username )
 	createUser(username);
 	addUserGroup( username, "students" );
 
-	createFile("Students/" + username + ".txt");
-	setPermissions("setfacl -m g::--- Students/" + username + ".txt");
-	setPermissions("setfacl -m u::rwx Students/" + username + ".txt");
-	setPermissions("setfacl -m o::--- Students/" + username + ".txt");
-	setPermissions("setfacl -m g:facultyexecute:rwx Students/" + username + ".txt");
-	setPermissions("sudo chown " + username + ": Students/" + username + ".txt");
+	createFile("./Database/Students/" + username + ".txt");
+	setPermissions("setfacl -m g::--- ./Database/Students/" + username + ".txt");
+	setPermissions("setfacl -m u::rwx ./Database/Students/" + username + ".txt");
+	setPermissions("setfacl -m o::--- ./Database/Students/" + username + ".txt");
+	setPermissions("setfacl -m g:facultyexecute:rwx ./Database/Students/" + username + ".txt");
+	setPermissions("sudo chown " + username + ": ./Database/Students/" + username + ".txt");
 }
 
 void createHod( string username )
@@ -263,7 +263,7 @@ void removeStudent( string username )
 	else
 	{
 		removeUser( username );
-		setPermissions("sudo rm Students/" + username + ".txt");
+		setPermissions("sudo rm ./Database/Students/" + username + ".txt");
 	}
 }
 
@@ -286,7 +286,7 @@ void removeInstructor( string username )
 	else
 	{
 		removeUser( username );
-		setPermissions("sudo rm -r Instructors/" + username + "/");
+		setPermissions("sudo rm -r ./Database/Instructors/" + username + "/");
 	}
 }
 

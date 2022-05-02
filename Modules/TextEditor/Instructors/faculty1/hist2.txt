@@ -1,2 +1,3 @@
-student1	10.000000
-student2	10.000000
+student1	28.000000
+student2	49.000000
+student3	0.000000

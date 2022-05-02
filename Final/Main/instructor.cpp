@@ -1,11 +1,11 @@
-#include "content.h"
+#include "./../UI/content.h"
 #include <iostream>
-#include<unistd.h>
-#include<fcntl.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <vector>
-#include "editor.h" 
-#include "../Student/student.h"
-#include "./../InstructorMarksList/instructor_marks_list.h"
+#include "./../UI/editor.h" 
+#include "./../Student/student.h"
+#include "./../Instructor/instructor_marks_list.h"
 using namespace std;
 
 
@@ -263,7 +263,7 @@ void restoreMarks()
 
 	InstructorMarksList instructor_marks_list;
 
-	vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Instructors/" + instructorName + "/hist0.txt");
+	vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Database/Instructors/" + instructorName + "/hist0.txt");
 
 	vector<string> studentList;
 	for(int i=0; i< list.size(); i++)
@@ -357,7 +357,7 @@ void handleButtonClick( string selection )
 
 		InstructorMarksList instructor_marks_list;
 
-		string prefix = "./Instructors/" + instructorName + "/hist" + to_string(currentHistory-1) + ".txt";
+		string prefix = "./Database/Instructors/" + instructorName + "/hist" + to_string(currentHistory-1) + ".txt";
 		instructor_marks_list.downloadAllinstructorMarks(prefix, fileName);
 
 		setPermissions("setfacl -m g::--- ./" + fileName);
@@ -375,7 +375,7 @@ void handleButtonClick( string selection )
 
 		InstructorMarksList instructor_marks_list;
 
-		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Instructors/" + instructorName + "/hist0.txt");
+		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Database/Instructors/" + instructorName + "/hist0.txt");
 
 		for( int i = 0 ; i < marks.size() ; i++ )
 		{
@@ -394,7 +394,7 @@ void handleButtonClick( string selection )
 
 		InstructorMarksList instructor_marks_list;
 
-		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Instructors/" + instructorName + "/hist0.txt");
+		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Database/Instructors/" + instructorName + "/hist0.txt");
 
 		vector<string> studentList;
 		marks.clear();
@@ -413,7 +413,7 @@ void handleButtonClick( string selection )
 
 		InstructorMarksList instructor_marks_list;
 
-		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Instructors/" + instructorName + "/hist0.txt");
+		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Database/Instructors/" + instructorName + "/hist0.txt");
 
 		vector<string> studentList;
 		marks.clear();
@@ -432,7 +432,7 @@ void handleButtonClick( string selection )
 
 		InstructorMarksList instructor_marks_list;
 
-		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Instructors/" + instructorName + "/hist1.txt");
+		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Database/Instructors/" + instructorName + "/hist1.txt");
 
 		vector<string> studentList;
 		marks.clear();
@@ -451,7 +451,7 @@ void handleButtonClick( string selection )
 
 		InstructorMarksList instructor_marks_list;
 
-		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Instructors/" + instructorName + "/hist2.txt");
+		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Database/Instructors/" + instructorName + "/hist2.txt");
 
 		vector<string> studentList;
 		marks.clear();
@@ -471,9 +471,9 @@ void handleButtonClick( string selection )
 
 		InstructorMarksList instructor_marks_list;
 
-		instructor_marks_list.revertHistory1("./Instructors/" + instructorName + "/hist0.txt", "./Instructors/" + instructorName + "/hist1.txt");
+		instructor_marks_list.revertHistory1("./Database/Instructors/" + instructorName + "/hist0.txt", "./Instructors/" + instructorName + "/hist1.txt");
 
-		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Instructors/" + instructorName + "/hist0.txt");
+		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Database/Instructors/" + instructorName + "/hist0.txt");
 
 		vector<string> studentList;
 		marks.clear();
@@ -493,9 +493,9 @@ void handleButtonClick( string selection )
 
 		InstructorMarksList instructor_marks_list;
 
-		instructor_marks_list.revertHistory2("./Instructors/" + instructorName + "/hist0.txt", "./Instructors/" + instructorName + "/hist1.txt", "./Instructors/" + instructorName + "/hist2.txt");
+		instructor_marks_list.revertHistory2("./Database/Instructors/" + instructorName + "/hist0.txt", "./Database/Instructors/" + instructorName + "/hist1.txt", "./Database/Instructors/" + instructorName + "/hist2.txt");
 
-		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Instructors/" + instructorName + "/hist0.txt");
+		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Database/Instructors/" + instructorName + "/hist0.txt");
 
 		vector<string> studentList;
 		marks.clear();
@@ -512,9 +512,9 @@ void handleButtonClick( string selection )
 	else if( selection == "Enroll Student" )
 	{
 		ExitEditorMode();
-		string hist0 = "./Instructors/" + instructorName + "/hist0.txt";
-		string hist1 = "./Instructors/" + instructorName + "/hist1.txt";
-		string hist2 = "./Instructors/" + instructorName + "/hist2.txt";
+		string hist0 = "./Database/Instructors/" + instructorName + "/hist0.txt";
+		string hist1 = "./Database/Instructors/" + instructorName + "/hist1.txt";
+		string hist2 = "./Database/Instructors/" + instructorName + "/hist2.txt";
 
 
 		cout << "Enter the student name" << endl;
@@ -543,13 +543,13 @@ void handleButtonClick( string selection )
 			instructor_marks_list.addMark(hist2, stname, 0);
 
 			Student student;
-			student.addCourse("Students/" + stname + ".txt", instructorName);
+			student.addCourse("./Database/Students/" + stname + ".txt", instructorName);
 		}
 		currentHistory = 1;
 
 		InstructorMarksList instructor_marks_list;
 
-		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Instructors/" + instructorName + "/hist0.txt");
+		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Database/Instructors/" + instructorName + "/hist0.txt");
 
 		vector<string> studentList;
 
@@ -565,9 +565,9 @@ void handleButtonClick( string selection )
 	else if( selection == "Remove Student" )
 	{
 		ExitEditorMode();
-		string hist0 = "./Instructors/" + instructorName + "/hist0.txt";
-		string hist1 = "./Instructors/" + instructorName + "/hist1.txt";
-		string hist2 = "./Instructors/" + instructorName + "/hist2.txt";
+		string hist0 = "./Database/Instructors/" + instructorName + "/hist0.txt";
+		string hist1 = "./Database/Instructors/" + instructorName + "/hist1.txt";
+		string hist2 = "./Database/Instructors/" + instructorName + "/hist2.txt";
 
 
 		cout << "Enter the student name" << endl;
@@ -596,13 +596,13 @@ void handleButtonClick( string selection )
 			instructor_marks_list.removeMark(hist2, stname);
 
 			Student student;
-			student.removeCourse("Students/" + stname + ".txt", instructorName);
+			student.removeCourse("./Database/Students/" + stname + ".txt", instructorName);
 		}
 		currentHistory = 1;
 
 		InstructorMarksList instructor_marks_list;
 
-		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Instructors/" + instructorName + "/hist0.txt");
+		vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Database/Instructors/" + instructorName + "/hist0.txt");
 
 		vector<string> studentList;
 
@@ -651,7 +651,7 @@ void initialize( string user)
 
 	InstructorMarksList instructor_marks_list;
 
-	vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Instructors/" + instructorName + "/hist0.txt");
+	vector<pair<string, float>> list = instructor_marks_list.getMarksList("./Database/Instructors/" + instructorName + "/hist0.txt");
 
 	vector<string> studentList;
 

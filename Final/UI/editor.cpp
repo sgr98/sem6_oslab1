@@ -417,6 +417,6 @@ int main()
 		user = pw->pw_name;
 	}
 
-	initialize("faculty1");
+	initialize(user);
 	enterEditorMode();
 }
