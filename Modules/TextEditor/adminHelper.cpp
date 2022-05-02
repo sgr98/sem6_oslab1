@@ -100,7 +100,7 @@ vector<string> getGroupsBelonging( string username )
 				while( token != NULL )
 				{
 					listOfUsers.push_back(token);
-					token = strtok(NULL, ":");
+					token = strtok(NULL, ",");
 				}
 				for( int j = 0 ; j < listOfUsers.size() ; j++ )
 				{
@@ -118,7 +118,7 @@ vector<string> getGroupsBelonging( string username )
 
 void createUser( string username )
 {	
-	string temp = "sudo useradd " + username;
+	string temp = "sudo useradd -m " + username;
 	const char* command = temp.c_str();
 	system(command);
 	
@@ -262,6 +262,7 @@ void removeStudent( string username )
 	else
 	{
 		removeUser( username );
+		setPermissions("sudo rm Students/" + username + ".txt");
 	}
 }
 
@@ -284,6 +285,7 @@ void removeInstructor( string username )
 	else
 	{
 		removeUser( username );
+		setPermissions("sudo rm -r Instructors/" + username + "/");
 	}
 }
 

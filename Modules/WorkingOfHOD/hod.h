@@ -23,4 +23,4 @@ vector<pair<string, vector<float>>> getAllStudentInstructorMarks(vector<pair<str
 // Get string value of all marks of all students and instructors
 string getAllStudentInstructorMarksString(vector<pair<string, string>> instructor_and_files, vector<pair<string, vector<float>>> allStudentInstructorMarks);
 // Download all marks of all students and instructors in a file
-void downloadAllStudentsInstructorMarks(string fileStr, vector<pair<string, string>> instructor_and_files);
+void downloadAllStudentsInstructorMarks(string fileStr, vector<pair<string, string>> instructor_and_files, vector<pair<string, vector<float>>> allStudentInstructorMarks );

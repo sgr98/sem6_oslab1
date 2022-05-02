@@ -16,3 +16,5 @@ void createHod( string username );
 void removeHod(string username);
 void removeInstructor( string username );
 void removeStudent( string username );
+vector<string> getUserList();
+vector<string> getGroupsBelonging( string username );

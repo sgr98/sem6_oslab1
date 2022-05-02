@@ -42,6 +42,11 @@ void InstructorMarksList::closeFile(char *fileName) {
 	fileDescpritor = -1;
 }
 
+void InstructorMarksList::setInstructorMarkList( vector<pair<string, float>> input )
+{
+	student_marks_list = input;
+}
+
 void InstructorMarksList::tokenizeMarksList() {
 	int charLen;
 	char buffer[4000];
@@ -418,7 +423,7 @@ void InstructorMarksList::downloadAllinstructorMarks(string instructorFilePath, 
 	strcpy(aim, aim_string.c_str());
 
     int fd = -1;
-    fd = open(fileName, O_WRONLY);		// Add O_CREAT and proper PERMISSIONS
+    fd = open(fileName, O_WRONLY | O_CREAT);		// Add O_CREAT and proper PERMISSIONS
 
     // if(truncate(fileName, 0) == -1) {
 	// 	perror("Could not truncate");

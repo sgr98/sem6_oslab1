@@ -27,6 +27,8 @@ class InstructorMarksList {
 		int copyFile(char *fileName1, char *fileName2);
 		
 	public:
+
+		void setInstructorMarkList( vector<pair<string, float>> input );
 		// Student Constructor
 		InstructorMarksList();
 		// Add Student Mark to a list of courses present in student file

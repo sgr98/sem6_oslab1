@@ -46,7 +46,6 @@ void showAdminMenu()
 	options.push_back("Remove Hod");
 	options.push_back("View All Users");
 	options.push_back("View Log File");
-	options.push_back("View Students Marks");
 
 	for( int i = 0 ; i < options.size() ; i++ )
 	{
@@ -161,7 +160,7 @@ void Confirmation(string message)
 	lines.push_back(*l3);
 }
 
-void ListOfusers( string adminName, vector<string> userList )
+void ListOfusers( string adminName, vector<string> userList, vector<string> groupList )
 {
 	lines.clear();
 	Element* e1 = new Element( 20, "Admin DashBoard", STRING, false, true, GREEN, false );
@@ -201,7 +200,8 @@ void ListOfusers( string adminName, vector<string> userList )
 		//size, content,   type,   edit , bold, color, clickable
 
 		(*elements)->push_back(new Element( 6, "      " , STRING, false, false, RED, false));
-		(*elements)->push_back(new Element( 30, userList[i] , STRING, false, false, RED, false));
+		(*elements)->push_back(new Element( 20, userList[i] , STRING, false, false, RED, false));
+		(*elements)->push_back(new Element( 30, groupList[i] , STRING, false, false, RED, false));
 
 		Line** l = new Line*;
 		*l = new Line(*elements, LEFT);
@@ -327,12 +327,24 @@ void handleButtonClick( string selection )
 		if( selection == "View All Users" )
 		{
 			currentPage = 2;
-			vector<string> studentList;
-			for( int i = 0 ; i < 10 ; i++ )
+			vector<string> appUserlist;
+			vector<string> userlist = getUserList();
+			vector<string> groupList;
+
+			for( int i= 0 ; i < userlist.size() ; i++ )
 			{
-				studentList.push_back("Student " + to_string(i+1));
+				vector<string> groups = getGroupsBelonging( userlist[i]);
+				for( int j = 0 ; j < groups.size() ; j++)
+				{
+					if( groups[j] == "Faculty" or groups[j] == "students" or groups[j] == "hods")
+					{
+						appUserlist.push_back(userlist[i]);
+						groupList.push_back(groups[j]);
+					}
+				}
 			}
-			ListOfusers("leo", studentList);
+
+			ListOfusers("leo", appUserlist, groupList);
 		}
 		else if( selection == "View Students Marks")
 		{
@@ -447,9 +459,9 @@ void editorProcessKeypress()
 	}
 }
 
-void initialize()
+void initialize( string user )
 {
-	AdminName = "poorna";
+	AdminName = user;
 	currentPage = 1;
 	showAdminMenu();
 }

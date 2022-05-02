@@ -98,7 +98,7 @@ vector<pair<string, vector<float>>> getAllStudentInstructorMarks(vector<pair<str
         int n_asim = allStudentInstructorMarks.size();
         for(int j = 0; j < n_asim; j++) {
             if(allStudentInstructorMarks[j].second.size() != i + 1) {
-                allStudentInstructorMarks[j].second.push_back(SHRT_MIN);
+                allStudentInstructorMarks[j].second.push_back(-1);
             }
         }
     }
@@ -138,7 +138,7 @@ string getAllStudentInstructorMarksString(vector<pair<string, string>> instructo
         asim_string += padString(allStudentInstructorMarks[i].first, stringPads.first);
         int n = allStudentInstructorMarks[i].second.size();
         for(int j = 0; j < n; j++) {
-            if(allStudentInstructorMarks[i].second[j] == SHRT_MIN)
+            if(allStudentInstructorMarks[i].second[j] == -1 )
                 asim_string += padString("--", stringPads.second);
             else
                 asim_string += padString(to_string(allStudentInstructorMarks[i].second[j]), stringPads.second);
@@ -149,28 +149,20 @@ string getAllStudentInstructorMarksString(vector<pair<string, string>> instructo
     return asim_string;
 }
 
-void downloadAllStudentsInstructorMarks(string fileStr, vector<pair<string, string>> instructor_and_files) {
-    int len = fileStr.length();
-	char fileName[len + 1];
-	strcpy(fileName, fileStr.c_str());
+void downloadAllStudentsInstructorMarks(string fileStr, vector<pair<string, string>> instructor_and_files, vector<pair<string, vector<float>>> allStudentInstructorMarks ) {
 
-    vector<pair<string, vector<float>>> allStudentInstructorMarks = getAllStudentInstructorMarks(instructor_and_files);
     string asim_string = getAllStudentInstructorMarksString(instructor_and_files, allStudentInstructorMarks);
 	
     asim_string = asim_string.substr(0, asim_string.length() - 1);
-    len = asim_string.length();
+    int len = asim_string.length();
 	char asim[len + 1];
 	strcpy(asim, asim_string.c_str());
 
     int fd = -1;
-    fd = open(fileName, O_WRONLY);		// Add O_CREAT and proper PERMISSIONS
-
-    // if(truncate(fileName, 0) == -1) {
-	// 	perror("Could not truncate");
-	// }
+    fd = open(fileStr.c_str(), O_CREAT | O_WRONLY);		// Add O_CREAT and proper PERMISSIONS
 
     if(fd < 0)
-		cout << "Error opening file " << fileName << endl;
+		cout << "Error opening file " << fileStr << endl;
 
 	write(fd, asim, len);
     close(fd);

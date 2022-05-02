@@ -6,6 +6,8 @@
 #include<fcntl.h>
 #include "../WorkingOfHOD/hod.h"
 using namespace std;
+	
+string hodName;
 
 vector<string> getUserList()
 {
@@ -215,12 +217,18 @@ void editorProcessKeypress()
 	}
 }
 
+void setPermissions( string permission )
+{
+	system(permission.c_str());
+}
 
 void handleButtonClick( string selection )
 {
 	if( selection == "Download" )
 	{
+		ExitEditorMode();
 		vector<string> instructorList;
+		vector<string> studentList;
 		vector<string> userlist = getUserList();
 		for( int i= 0 ; i < userlist.size() ; i++ )
 		{
@@ -230,6 +238,10 @@ void handleButtonClick( string selection )
 				if( groups[j] == "Faculty" )
 				{
 					instructorList.push_back(userlist[i]);
+				}
+				else if( groups[j] == "students" )
+				{
+					studentList.push_back(userlist[i]);
 				}
 			}
 		}
@@ -246,7 +258,48 @@ void handleButtonClick( string selection )
 			instructorfiles.push_back(instructor_file);
 		}
 
-		downloadAllStudentsInstructorMarks("./EntireMarks.txt", instructorfiles);
+		vector<pair<string, vector<float>>> table = getAllStudentInstructorMarks(instructorfiles);
+
+		for( int i = 0 ; i < studentList.size() ; i++ )
+		{
+			bool b = false;
+			for( int j = 0 ; j < table.size() ; j++ )
+			{
+				if( table[j].first == studentList[i] )
+				{
+					b = true;
+					break;
+				}
+			}
+
+			pair<string, vector<float>> studentMarks;
+			if( b == false )
+			{
+				studentMarks.first = studentList[i];
+				vector<float> f;
+				for( int j = 0 ; j < table[0].second.size() ; j++ )
+				{
+					f.push_back(-1);
+				}
+				studentMarks.second = f;
+
+				table.push_back(studentMarks);
+			}
+		}
+		cout << "Enter the File name of the downloaded Marks (with the extension)" << endl;
+		string fileName;
+		cin >> fileName;
+
+		downloadAllStudentsInstructorMarks("./" + fileName, instructorfiles, table);
+
+		setPermissions("setfacl -m g::--- ./" + fileName);
+		setPermissions("setfacl -m u::rwx ./" + fileName);
+		setPermissions("setfacl -m o::--- ./" + fileName);
+
+		setPermissions("sudo chown " + hodName + ": ./" + fileName);
+
+		cout << "Successfully created file and set permissions" << endl;
+		enterEditorMode();
 	}
 } 
 
@@ -268,9 +321,9 @@ bool enterEditorMode( int* x, int* y )
 	return false;
 }
 
-void initialize()
+void initialize( string user )
 {
-	string hodName = "hod1";
+	hodName = user;
 
 	vector<string> instructorList;
 	vector<string> studentList;

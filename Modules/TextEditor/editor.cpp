@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <pwd.h>
 #include <sys/ioctl.h>
 #include <termios.h>
 #include <sys/types.h>
@@ -404,17 +405,18 @@ void enterEditorMode()
 
 int main()
 {
-	initialize();
+	string user;
+	register struct passwd *pw;
+	register uid_t uid;
 
+	uid = geteuid();
+	pw = getpwuid(uid);
+
+	if( pw )
+	{
+		user = pw->pw_name;
+	}
+
+	initialize(user);
 	enterEditorMode();
-	
-	/*
-	string str;
-	cin >> str;
-
-	cout << str << endl;
-
-	enterEditorMode();
-	return 0;
-	*/
 }

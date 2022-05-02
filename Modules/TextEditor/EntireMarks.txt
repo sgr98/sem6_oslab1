@@ -1,3 +1,0 @@
-            faculty1            faculty2            
-student1    55.000000           90.000000           
-student2    22.000000           --                  

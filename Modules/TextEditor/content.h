@@ -6,7 +6,7 @@
 using namespace std;
 
 vector<string> getContent(int, int);
-void initialize();
+void initialize(string user);
 void getRightPos(int*, int*);
 void getLeftPos(int*, int*);
 void getUpPos(int*, int*);

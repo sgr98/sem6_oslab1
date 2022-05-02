@@ -1,3 +1,0 @@
-      Courses:-       faculty1
-       student1             55
-         Mean :             55

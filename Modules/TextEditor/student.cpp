@@ -10,6 +10,7 @@
 using namespace std;
 
 string studentName;
+
 void StudentMarks(string AdminName, vector<string> Instructors, string Student, vector<int> marks)
 {
 	lines.clear();
@@ -111,13 +112,24 @@ float get_mean(string coursename)
     return instructor_marks_list.getMarksAverage(file);
 }
 
+void setPermissions( string permission )
+{
+	system(permission.c_str());
+}
+
 void handleButtonClick( string selection )
 {
 	if( selection == "Download" )
 	{
+		ExitEditorMode();
+
+		cout << "Enter the File name of the downloaded Marks (with the extension)" << endl;
+		string fileName;
+		cin >> fileName;
+
 		ofstream f;
 
-        f.open(studentName+"Marks.txt");
+        f.open(fileName);
         Student student;
         vector<string> course_list = student.getCourses("./Students/" + studentName + ".txt");
         vector< int > marks;
@@ -139,6 +151,18 @@ void handleButtonClick( string selection )
         for(i=0;i<course_list.size();i++)
         f<<setw(space)<<get_mean(course_list[i]);
         f<<endl;
+		f.close();
+
+		
+
+		setPermissions("setfacl -m g::--- ./" + fileName);
+		setPermissions("setfacl -m u::rwx ./" + fileName);
+		setPermissions("setfacl -m o::--- ./" + fileName);
+
+		setPermissions("sudo chown " + studentName + ": ./" + fileName);
+
+		cout << "Successfully created file and set permissions" << endl;
+		enterEditorMode();
 	}
 	return;
 } 
@@ -175,10 +199,10 @@ int get_marks(string coursename,string student)
     return student_marks_list[i].second ;
 }
 
-void initialize()
+void initialize( string user )
 {
 	Student student;
-	studentName = "student1";
+	studentName = user;
 
 	vector<string> course_list = student.getCourses("./Students/" + studentName + ".txt");
 
@@ -191,20 +215,5 @@ void initialize()
 		marks.push_back(get_marks(course_list[i],studentName));
 	}
 
-	/*
-	cout<<setw(space)<<"Courses:-";
-	for(i=0;i<course_list.size();i++)
-		cout<<setw(space)<<course_list[i];
-	cout<<endl;
-	cout<<setw(space)<<studentName;
-	for(i=0;i<marks.size();i++)
-		cout<<setw(space)<<marks[i];
-	cout<<endl;
-	cout<<setw(space)<<"Mean :";
-	for(i=0;i<course_list.size();i++)
-		cout<<setw(space)<<get_mean(course_list[i]);
-	cout<<endl;
-	*/
-	
 	StudentMarks(studentName, course_list, studentName, marks);
 }
