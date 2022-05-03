@@ -2,12 +2,15 @@
  * daemonize.c * This example daemonizes a process, writes a few log messages, * sleeps 20 seconds and terminates afterwards.  */ 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <syslog.h>
 #include "log.h"
+
+string to_string(int i)                                                                                                                {                                                                                                                                              char text[20];                                                                                                                         sprintf(text, "%d", i);                                                                                                                return string(text);                                                                                                           }
 
 static void skeleton_daemon()
 {
@@ -76,18 +79,75 @@ void handler( int signalNumber )
 	}
 }
 
+void sigusr1(int signo, siginfo_t *si, void *data )
+{
+	(void)signo;
+	(void)data;
+	char t[20];
+	int k = si->si_uid;
+	sprintf(t, "%d", (int)si->si_uid);
+	string uid = string(t);
+	string msg = "signal sigusr1 " +  uid;
+	syslog(LOG_NOTICE, msg.c_str());
+	entry("user id " + uid, "   ", "login");
+}
+void sigusr2(int signo, siginfo_t *si, void *data )
+{
+	(void)signo;
+	(void)data;
+	char t[20];
+	sprintf(t, "%d", (int)si->si_uid);
+	string uid = string(t);
+	string msg = "signal sigusr2 " +  uid;
+	syslog(LOG_NOTICE, msg.c_str());
+	entry("user id " + uid, "   ", "logout");
+}
+
 int main()
 {
     skeleton_daemon();
 
-	if( signal(SIGINT, handler) == SIG_ERR )
+
+	struct sigaction sa1, sa2;
+	memset(&sa1, 0, sizeof(sa1));
+	sa1.sa_flags = SA_SIGINFO;
+	sa1.sa_sigaction = sigusr1;
+	if( sigaction(SIGUSR1, &sa1, 0) == -1 )
 	{
-		syslog(LOG_NOTICE, "signal error");
+		syslog(LOG_NOTICE, "sigaction usr1 error");
 	}
 	else
 	{
-		syslog(LOG_NOTICE, "signal success");
+		syslog(LOG_NOTICE, "sigaction  usr1 succes");
 	}
+	
+	memset(&sa2, 0, sizeof(sa2));
+	sa2.sa_flags = SA_SIGINFO;
+	sa2.sa_sigaction = sigusr2;
+	if( sigaction(SIGUSR2, &sa2, 0) == -1 )
+		syslog(LOG_NOTICE, "sigaction usr2 error");
+	else
+		syslog(LOG_NOTICE, "sigaction  usr2 succes");
+	
+	/*
+	if( signal(SIGUSR1, handler) == SIG_ERR )
+	{
+		syslog(LOG_NOTICE, "sigusr1 error");
+	}
+	else
+	{
+		syslog(LOG_NOTICE, "sigusr1 success");
+	}
+
+	if( signal(SIGUSR2, handler) == SIG_ERR )
+	{
+		syslog(LOG_NOTICE, "sigusr2 error");
+	}
+	else
+	{
+		syslog(LOG_NOTICE, "sigusr2 success");
+	}
+	*/
 
     while (1)
     {

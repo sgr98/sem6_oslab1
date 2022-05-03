@@ -8,6 +8,21 @@
 #include "./../Instructor/instructor_marks_list.h"
 using namespace std;
 
+int stoi(string str){
+    int num = 0;
+    int i = 0;
+    bool isNegetive = false;
+    if(str[i] == '-'){
+        isNegetive = true;
+        i++;
+    }
+    while (str[i] && (str[i] >= '0' && str[i] <= '9')){
+        num = num * 10 + (str[i] - '0');
+        i++;
+    }
+    if(isNegetive) num = -1 * num;
+    return num;
+}
 
 int currentHistory;
 string instructorName;
@@ -360,11 +375,13 @@ void handleButtonClick( string selection )
 		string prefix = "./Database/Instructors/" + instructorName + "/hist" + to_string(currentHistory-1) + ".txt";
 		instructor_marks_list.downloadAllinstructorMarks(prefix, fileName);
 
+		/*
 		setPermissions("setfacl -m g::--- ./" + fileName);
 		setPermissions("setfacl -m u::rwx ./" + fileName);
 		setPermissions("setfacl -m o::--- ./" + fileName);
+		*/
 
-		setPermissions("sudo chown " + instructorName + ": ./" + fileName);
+		//setPermissions("sudo chown " + instructorName + ": ./" + fileName);
 
 		cout << "Successfully created file and set permissions" << endl;
 		enterEditorMode();
@@ -382,9 +399,10 @@ void handleButtonClick( string selection )
 			list[i].second = marks[i];
 		}
 
-		string prefix = "./Instructors/" + instructorName + "/hist";
+		string prefix = "./Database/Instructors/" + instructorName + "/hist";
 
 		instructor_marks_list.setInstructorMarkList( list );
+		cout << "save edit is going to be called" << endl;
 
 		instructor_marks_list.saveEdit(prefix + "0.txt", prefix + "1.txt", prefix + "2.txt" );
 	}

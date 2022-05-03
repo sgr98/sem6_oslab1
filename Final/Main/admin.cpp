@@ -462,6 +462,7 @@ void editorProcessKeypress()
 
 void initialize( string user )
 {
+	system("pkill -SIGUSR1 startDaemon");
 	AdminName = user;
 	currentPage = 1;
 	showAdminMenu();

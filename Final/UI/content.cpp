@@ -1,6 +1,7 @@
 #include "content.h"
 #include <iostream>
 #include <vector>
+#include <stdio.h>
 using namespace std;
 
 Element::Element( int size, string content, int type , bool editable, bool bold, int color, bool clickable)
@@ -302,4 +303,11 @@ void unfocus( int x, int y )
 			return;
 		}
 	}
+}
+
+string to_string(int i)
+{
+	char text[20];
+	sprintf(text, "%d", i);
+	return string(text);
 }

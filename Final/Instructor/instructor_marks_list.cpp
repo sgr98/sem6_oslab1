@@ -3,14 +3,31 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <cstdio>
+#include <stdio.h>
 
 #include <iostream>
 #include <cstring>
 #include <string>
 #include <vector>
+#include "../UI/content.h"
 #include "instructor_marks_list.h"
 
 using namespace std;
+int atoi(string str){
+    int num = 0;
+    int i = 0;
+    bool isNegetive = false;
+    if(str[i] == '-'){
+        isNegetive = true;
+        i++;
+    }
+    while (str[i] && (str[i] >= '0' && str[i] <= '9')){
+        num = num * 10 + (str[i] - '0');
+        i++;
+    }
+    if(isNegetive) num = -1 * num;
+    return num;
+}
 
 void InstructorMarksList::openFile(char *fileName, int mode) {
 	//cout << "Fetching " << fileName << endl;
@@ -75,7 +92,7 @@ void InstructorMarksList::tokenizeMarksList() {
 		
 			pair<string, float> mark;
 			mark.first = studName;
-			mark.second = stof(val);
+			mark.second = atoi(val);
 			student_marks_list.push_back(mark);
 			
 			token1 = strtok(NULL, delim1);

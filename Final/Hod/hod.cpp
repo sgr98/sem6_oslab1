@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <string>
+#include "./../UI/content.h"
 #include <vector>
 #include <limits.h>
 

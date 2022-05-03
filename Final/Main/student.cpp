@@ -159,7 +159,6 @@ void handleButtonClick( string selection )
 		setPermissions("setfacl -m u::rwx ./" + fileName);
 		setPermissions("setfacl -m o::--- ./" + fileName);
 
-		setPermissions("sudo chown " + studentName + ": ./" + fileName);
 
 		cout << "Successfully created file and set permissions" << endl;
 		enterEditorMode();

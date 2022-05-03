@@ -18,6 +18,7 @@ bool enterEditorMode(int*, int*);
 void exitEditorMode(int*, int*);
 void handleBackSpace(int*, int*);
 void insertChar(int*, int*, int);
+string to_string(int i);
 
 
 enum position

@@ -2,6 +2,8 @@
 #include<fcntl.h>
 #include<unistd.h>
 #include<vector>
+#include<stdio.h>
+#include<cstdlib>
 #include<string.h>
 #include"adminHelper.h"
 #include<sys/stat.h>
@@ -118,7 +120,7 @@ vector<string> getGroupsBelonging( string username )
 
 void createUser( string username )
 {	
-	string temp = "sudo useradd -m " + username;
+	string temp = "sudo pw user add " + username + " -m ";
 	const char* command = temp.c_str();
 	system(command);
 	
@@ -130,7 +132,7 @@ void createUser( string username )
 
 void removeUser( string username )
 {
-	string temp = "sudo userdel " + username;
+	string temp = "sudo pw userdel " + username;
 	const char* command = temp.c_str();
 	system(command);
 }
@@ -157,7 +159,7 @@ void createGroup( string groupName )
 
 void addUserGroup( string user, string group )
 {
-	string command = "sudo usermod -a -G " + group + " " + user;
+	string command = "sudo pw group mod " + group + " -m " + user;
 	system(command.c_str());
 }
 
@@ -172,7 +174,7 @@ void createDirectory( string dirname )
 	const char* path = dirname.c_str();
 	if( mkdir(path, S_IRWXU) == -1 )
 	{
-		cerr << "Error: " << strerror(errno) << endl;
+		cerr << "Error: " << strerror(1) << endl;
 		return;
 	}
 }

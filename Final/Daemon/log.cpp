@@ -18,7 +18,7 @@ log::log(string date,string time,string user,string type,string action)
 
 vector<log> get_logs()
 {
-    ifstream personal_filein("/home/poorna/logfile.txt");
+    ifstream personal_filein("/root/sem6_oslab1/Final/Daemon/logfile.txt");
     vector<log> logs;
     string line="";
     string date,time,user,type,action;
@@ -50,7 +50,7 @@ vector<log> get_logs()
 bool entry(string username,string type,string action)//log format: date, time, username,action
 {//action can be login or logout
     ofstream f;
-    f.open("/home/poorna/logfile.txt", std::ios_base::app);
+    f.open("/root/sem6_oslab1/Final/Daemon/logfile.txt", std::ios_base::app);
     time_t now = time(0);
     char* dt = ctime(&now);
     //example
